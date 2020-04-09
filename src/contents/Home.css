@@ -1,0 +1,98 @@
+@font-face{
+    font-family: 'OpenSans-Regular';
+    src: url('../asset/font/open-sans/OpenSans-Regular.ttf');
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.bodyContent{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(235, 235, 235);
+}
+.titleList{
+    position: absolute;
+    left: 33%;
+}
+.header{
+    width: 100%;
+    height: 80px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    z-index: 1;
+    position: fixed;
+}
+.cartHeader{
+    position: absolute;
+    width: 25%;
+    height: 80px;
+    right: 0;
+    top: 0;
+    border-left: 1px solid rgba(212, 212, 212, 0.25);
+}
+
+.sideBar{
+    position: fixed;
+    width: 80px;
+    height: 100px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    bottom: 0;
+    z-index: 1;
+}
+
+.cartBar{
+    position: fixed;
+    width: 25%;
+    height: 100px;
+    right: 0;
+    bottom: 0;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    z-index: 1;
+}
+.imgSearch{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    right: 27%;
+    top: 23%;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.inputSearch{
+    position: absolute;
+    right: 29%;
+    top: 20px;
+    width: 0px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid  rgb(228, 226, 226);;
+    outline:none;
+    background-color: rgb(247, 247, 247);
+    top: 30%;
+    transition: 1s;
+    padding-left: 10px;
+    color: rgb(126, 126, 126);
+    font-size: 18px;
+    font-family: OpenSans-Regular;
+}
+
+.active{
+    right: 31%;
+    width: 280px;
+}
+
+.imgMenu{
+    position: absolute;
+    left: 25px;
+    top: 30%;
+    width: 30px;
+    height: 30px;
+}
