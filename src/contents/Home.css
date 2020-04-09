@@ -1,11 +1,12 @@
 @font-face{
-    font-family: 'OpenSans-Regular';
-    src: url('../asset/font/open-sans/OpenSans-Regular.ttf');
+    font-family: 'AirbnbCerealMedium';
+    src: url('../asset/font/AirbnbCerealMedium/AirbnbCerealMedium.ttf');
 }
 
 *{
     margin: 0;
     padding: 0;
+    font-family: AirbnbCerealMedium;
 }
 
 .bodyContent{
@@ -36,6 +37,19 @@
     border-left: 1px solid rgba(212, 212, 212, 0.25);
 }
 
+.elipse{
+    position: relative;
+    bottom: 48%;
+    left: 60%;
+    line-height: 25px;
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 50%;
+    background-color: aqua;
+}
+
 .sideBar{
     position: fixed;
     width: 80px;
@@ -55,10 +69,16 @@
     background: #FFFFFF;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
     z-index: 1;
+    text-align: center;
+}
+
+.iconEmpty{
+    width: 150px;
+    margin-top: 80px;
 }
 .imgSearch{
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     position: absolute;
     right: 27%;
     top: 23%;
@@ -80,7 +100,7 @@
     transition: 1s;
     padding-left: 10px;
     color: rgb(126, 126, 126);
-    font-size: 18px;
+    font-size: 15px;
     font-family: OpenSans-Regular;
 }
 
@@ -93,6 +113,23 @@
     position: absolute;
     left: 25px;
     top: 30%;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.title{
+    margin-top: 18px;
+    font-size: 30px;
+}
+
+.iconBar{
+    width: 35px;
+    height: 35px;
+    margin-top: 50px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+.textCart{
+    color: #CECECE;
 }
