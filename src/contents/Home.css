@@ -159,6 +159,25 @@
 
 }
 
+.slideBack{
+    position: absolute;
+    width: 240px;
+    height: 200px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background-color: black;
+    opacity: .5;
+    display: none;
+}
+
+.tick{
+    margin-top: 35%;
+}
+
+.slideBackActive{
+    display: block;
+}
+
 .price{
     font-weight: bold;
     font-size: 18px;
@@ -170,6 +189,7 @@
     height: 190px;
     max-width: 220px;
     max-height: 190px;
+    cursor: pointer;
 }
 
 .sidebarBox{

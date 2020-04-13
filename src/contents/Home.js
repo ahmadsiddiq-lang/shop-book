@@ -6,6 +6,7 @@ const Home = () => {
     const [height, setHeight] = useState(window.innerHeight - 80)
     const [transInput, setTrans] = useState(false)
     const [sidBarBox, setBar] = useState(false)
+    const [slideBack, setSlide] = useState(false)
     const [cart, setCart] = useState(0)
     const resize = () => {
         setHeight(window.innerHeight - 80)
@@ -96,7 +97,7 @@ const Home = () => {
                         </div>
                         <p className="texPPN">* Belum termasuk PPN</p>
                         <button type="button" class="btn btn-primary btn-lg btn-block">Checkout</button>
-                        <button type="button" class="btn btn-secondary btn-lg btn-block">Print</button>
+                        <button onClick={()=> setSlide(slideBack ? false : true)}  type="button" class="btn btn-secondary btn-lg btn-block">Cencel</button>
                     </div>
                 </div> :
                 <div className="cartBar" style={{height: height}}>
@@ -107,27 +108,42 @@ const Home = () => {
             } 
             <div className="content">
                 <div className="listContent">
-                    <img className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
+                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
+                    </div>
+                    <img onClick={()=> setSlide(slideBack ? false : true)} className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
                     <p className="titleImg">Wiener Schnitzel</p>
                     <p className="price">Rp. 69.000</p>
                 </div>  
                 <div className="listContent">
-                    <img className="imgContent" src={require('../asset/img/unnamed.jpg')} alt=""/>
+                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
+                    </div>
+                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/unnamed.jpg')} alt=""/>
                     <p className="titleImg">Wiener Schnitzel</p>
                     <p className="price">Rp. 69.000</p>
                 </div>  
                 <div className="listContent">
-                    <img className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
+                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
+                    </div>
+                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
                     <p className="titleImg">Wiener Schnitzel</p>
                     <p className="price">Rp. 69.000</p>
                 </div>    
                 <div className="listContent">
-                    <img className="imgContent" src={require('../asset/img/theshackbook2.jpg')} alt=""/>
+                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
+                    </div>
+                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/theshackbook2.jpg')} alt=""/>
                     <p className="titleImg">Wiener Schnitzel</p>
                     <p className="price">Rp. 69.000</p>
                 </div>
                 <div className="listContent">
-                    <img className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
+                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
+                    </div>
+                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
                     <p className="titleImg">Wiener Schnitzel</p>
                     <p className="price">Rp. 69.000</p>
                 </div>
