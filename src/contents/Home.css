@@ -9,12 +9,6 @@
     font-family: AirbnbCerealMedium;
 }
 
-.bodyContent{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(235, 235, 235);
-}
 .titleList{
     position: absolute;
     left: 33%;
@@ -27,6 +21,7 @@
     text-align: center;
     z-index: 1;
     position: fixed;
+    top: 0;
 }
 .cartHeader{
     position: absolute;
@@ -136,11 +131,13 @@
 }
 
 .content{
+    /* border: 2px solid; */
     width: 69%;
     max-width: 69%;
     margin-top: 80px;
     margin-left: 80px;
     background-color: rgb(235, 235, 235);
+    padding-bottom: 10px;
 }
 
 .listContent{
@@ -193,9 +190,10 @@
 }
 
 .sidebarBox{
-    position: absolute;
+    position: fixed;
     height: 100%;
     width: 15%;
+    top: 0;
     left: -40%;
     background: #FFFFFF;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
@@ -204,11 +202,12 @@
 }
 
 .activeBar{
+    top: 0;
     left: 0;
 }
 
 .backSide{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
@@ -401,4 +400,109 @@
 .btn-secondary:focus{
     background-color: rgb(168, 10, 68);
     border-color: rgb(168, 10, 68);
+}
+
+.modals{
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.589);
+    align-content: center;
+}
+
+.modalActive{
+    display: block;
+}
+
+.content-modal{
+    width: 40%;
+    height: 70%;
+    background-color: white;
+    z-index: 999;
+    margin: auto;
+    text-align: center;
+    margin-top: 5%;
+    border-radius: 4px;
+}
+
+.titleAdd{
+    padding: 10px;
+    border-bottom: 2px solid rgb(192, 192, 192);
+}
+
+.formInput{
+    /* border: 2px solid; */
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    text-align: left;
+    position: relative;
+    
+}
+
+.labelInput{
+    margin-top: 10px;
+}
+
+.chooseFile{
+ margin-top: 20px;
+ margin-bottom: 60px;
+}
+
+.btn-ok-add{
+    position: absolute;
+    right: 0;
+    background-color: #57CAD5;
+    bottom: 10px;
+    width: 80px;
+    color: white;
+}
+
+.btn-ok-add:hover{
+    background-color: rgb(38, 179, 192);
+    color: white;
+}
+
+.btn-ok-add:focus{
+    background-color: rgb(29, 140, 150);
+    color: white;
+}
+
+.btn-cancel-add{
+    position: absolute;
+    background-color: #F24F8A;
+    right: 90px;
+    bottom: 10px;
+    color: white;
+}
+
+.btn-cancel-add:hover{
+    background-color: rgb(214, 68, 122);
+    color: white;
+}
+.btn-cancel-add:focus{
+    background-color: rgb(175, 52, 97);
+    color: white;
+}
+
+
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.cf {
+    *zoom: 1;
 }

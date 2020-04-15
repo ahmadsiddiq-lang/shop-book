@@ -7,6 +7,7 @@ const Home = () => {
     const [transInput, setTrans] = useState(false)
     const [sidBarBox, setBar] = useState(false)
     const [slideBack, setSlide] = useState(false)
+    const [modal, setModals] = useState(true)
     const [cart, setCart] = useState(0)
     const resize = () => {
         setHeight(window.innerHeight - 80)
@@ -37,7 +38,7 @@ const Home = () => {
             <div className="sideBar" style={{height: height}}>
                 <img className="iconBar" src={require('../asset/img/spoon.png')} alt=""/>
                 <img className="iconBar" src={require('../asset/img/catalog.png')} alt=""/>
-                <img className="iconBar" src={require('../asset/img/add.png')} alt=""/>
+                <img onClick={()=> setModals(modal ? false : true)} className="iconBar" src={require('../asset/img/add.png')} alt=""/>
             </div>
                 <div onClick={()=> setBar(sidBarBox ? false : true)} className={sidBarBox ? 'backSide' : 'backSide slide'}></div>
             <div className={sidBarBox ? 'sidebarBox activeBar' : 'sidebarBox'}>
@@ -53,7 +54,7 @@ const Home = () => {
                     <img className="iconBarBox" src={require('../asset/img/catalog.png')} alt=""/>
                     <h5 className="titleIcon">History</h5>
                 </div>
-                <div className="boxIcon">
+                <div onClick={()=> setModals(modal ? false : true)} className="boxIcon">
                     <img className="iconBarBox" src={require('../asset/img/add.png')} alt=""/>
                     <h5 className="titleIcon">Add</h5>
                 </div>
@@ -106,7 +107,7 @@ const Home = () => {
                     <p className="textCart">Please add some items from the menu</p>
                 </div>
             } 
-            <div className="content">
+            <div className="content cf">
                 <div className="listContent">
                     <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
                         <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
@@ -146,6 +147,72 @@ const Home = () => {
                     <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
                     <p className="titleImg">Wiener Schnitzel</p>
                     <p className="price">Rp. 69.000</p>
+                </div>
+                <div className="listContent">
+                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
+                    </div>
+                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
+                    <p className="titleImg">Wiener Schnitzel</p>
+                    <p className="price">Rp. 69.000</p>
+                </div>
+                <div className="listContent">
+                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
+                    </div>
+                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
+                    <p className="titleImg">Wiener Schnitzel</p>
+                    <p className="price">Rp. 69.000</p>
+                </div>
+                <div className="listContent">
+                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
+                    </div>
+                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
+                    <p className="titleImg">Wiener Schnitzel</p>
+                    <p className="price">Rp. 69.000</p>
+                </div>
+                <div className="listContent">
+                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
+                    </div>
+                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
+                    <p className="titleImg">Wiener Schnitzel</p>
+                    <p className="price">Rp. 69.000</p>
+                </div>
+                <div className="listContent">
+                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
+                    </div>
+                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
+                    <p className="titleImg">Wiener Schnitzel</p>
+                    <p className="price">Rp. 69.000</p>
+                </div>
+            </div>
+            <div 
+            // onClick={()=> setModals(modal ? false : true)} 
+            className={modal ? "modal" : "modals modalActive"}>
+                <div className="box-modal">
+                    <div className="content-modal">
+                        <h3 className="titleAdd">Add Product</h3>
+                        <div className="formInput">
+                            <label className="labelInput" for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control inputAdd" id="exampleInputEmail1" aria-describedby="emailHelp"></input>
+                            <label className="labelInput" for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control inputAdd" id="exampleInputEmail1" aria-describedby="emailHelp"></input>
+                            <label className="labelInput" for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control inputAdd" id="exampleInputEmail1" aria-describedby="emailHelp"></input>
+                            <label className="labelInput" for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control inputAdd" id="exampleInputEmail1" aria-describedby="emailHelp"></input>
+                            
+                            <div class="custom-file chooseFile">
+                                <input type="file" class="custom-file-input" id="customFile"/>
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                            <button onClick={()=> setModals(modal ? false : true)}  type="button" class="btn btn-cancel-add">Cancel</button>
+                            <button type="button" class="btn btn-ok-add">Ok</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
