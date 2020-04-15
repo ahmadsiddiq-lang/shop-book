@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import EventListener from 'react-event-listener'
 import './Home.css';
+import ReactToPrint from 'react-to-print';
 
 const Home = () => {
     const [height, setHeight] = useState(window.innerHeight - 80)
@@ -8,7 +9,9 @@ const Home = () => {
     const [sidBarBox, setBar] = useState(false)
     const [slideBack, setSlide] = useState(false)
     const [modal, setModals] = useState(true)
+    const [modalCheckout, setModalsCheckout] = useState(true)
     const [cart, setCart] = useState(0)
+    const componentRef = useRef();
     const resize = () => {
         setHeight(window.innerHeight - 80)
     }
@@ -18,6 +21,32 @@ const Home = () => {
     }
 
     useEffect(()=>{dataCart()})
+
+    class ComponentToPrint extends React.Component {
+        render() {
+          return (
+            <div className="note-chackout">
+                <h3 className="h3-checkout">Checkout</h3>
+                    <p className="no-receipt">Receipt no: #010410919</p>
+                    <p className="name-cashier">Cashier :  Pevita Pearce</p>
+                    <table className="tabel-ckecout">
+                        <tbody>
+                            <tr>
+                                <td>Coffee Latte 1x</td>
+                                <td>Rp. 15.000</td>
+                            </tr>
+                            <tr>
+                                <td>Ppn 10%</td>
+                                <td>Rp. 10.500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p className="total-price">Total : Rp. 115.500</p>
+                    <p className="payment">Payment: Cash</p>
+            </div>
+          );
+        }
+      }
 
     return(
         <div className="bodyContent">
@@ -97,7 +126,7 @@ const Home = () => {
                             <h6 className="titleTotalprice">Total : <span className="totalPrice">Rp. 105.000</span></h6>
                         </div>
                         <p className="texPPN">* Belum termasuk PPN</p>
-                        <button type="button" class="btn btn-primary btn-lg btn-block">Checkout</button>
+                        <button onClick={()=> setModalsCheckout(modalCheckout ? false : true) } type="button" class="btn btn-primary btn-lg btn-block">Checkout</button>
                         <button onClick={()=> setSlide(slideBack ? false : true)}  type="button" class="btn btn-secondary btn-lg btn-block">Cencel</button>
                     </div>
                 </div> :
@@ -210,8 +239,23 @@ const Home = () => {
                                 <label class="custom-file-label" for="customFile">Choose file</label>
                             </div>
                             <button onClick={()=> setModals(modal ? false : true)}  type="button" class="btn btn-cancel-add">Cancel</button>
-                            <button type="button" class="btn btn-ok-add">Ok</button>
+                            <button type="button" class="btn btn-ok-add">Add</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div className={modalCheckout ? "modal-checkout" : "modal-checkout modal-checkout-active"}>
+                <div onClick={()=> setModalsCheckout(modalCheckout ? false : true)} className="overlay"></div>
+                <div className="content-modal-checkout">
+                    <div onClick={()=> setModalsCheckout(modalCheckout ? false : true)} className="close-modal-checkout">X</div>
+                    <div className="box-content-checkout">
+                        <ComponentToPrint ref={componentRef} />
+                        <ReactToPrint
+                                trigger={() => <button type="button" class="btn btn-checkout-print btn-lg btn-block">Print</button>}
+                                content={() => componentRef.current}
+                            />
+                        <p>Or</p>
+                        <button type="button" class="btn btn-checkout-send btn-lg btn-block">Send Email</button>
                     </div>
                 </div>
             </div>
