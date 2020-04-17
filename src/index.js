@@ -5,13 +5,16 @@ import './index.css';
 import Home from '../src/contents/Home';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
-
+import {Provider} from 'react-redux';
+import store from '../src/redux/store';
 const Data = () => {
   return(
-    <Router>
-      <Route path='/' exact component={Home} />
-      <Route path='/Home' exact component={Home} />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Route path='/' exact component={Home} />
+        <Route path='/Home' exact component={Home} />
+      </Router>
+    </Provider>
   )
 }
 

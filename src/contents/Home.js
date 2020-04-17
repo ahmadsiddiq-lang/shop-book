@@ -2,6 +2,8 @@ import React, {useState, useEffect, useRef} from 'react';
 import EventListener from 'react-event-listener'
 import './Home.css';
 import ReactToPrint from 'react-to-print';
+import {getProduct} from '../redux/action/product';
+import { useDispatch, connect } from 'react-redux';
 
 const Home = () => {
     const [height, setHeight] = useState(window.innerHeight - 80)
@@ -11,6 +13,7 @@ const Home = () => {
     const [modal, setModals] = useState(true)
     const [modalCheckout, setModalsCheckout] = useState(true)
     const [cart, setCart] = useState(0)
+    const [dataProduct, setdataProduct] = useState([])
     const componentRef = useRef();
     const resize = () => {
         setHeight(window.innerHeight - 80)
@@ -20,7 +23,16 @@ const Home = () => {
         setCart(2)
     }
 
+    const dispatch = useDispatch();
+
+    const getAllProduct = async ()=>{
+        const data = await dispatch(getProduct());
+        setdataProduct(data.value.data);
+    }
+
     useEffect(()=>{dataCart()})
+    useEffect(()=> {getAllProduct()},[])
+    // useEffect(()=>console.log(dataProduct))
 
     class ComponentToPrint extends React.Component {
         render() {
@@ -126,8 +138,8 @@ const Home = () => {
                             <h6 className="titleTotalprice">Total : <span className="totalPrice">Rp. 105.000</span></h6>
                         </div>
                         <p className="texPPN">* Belum termasuk PPN</p>
-                        <button onClick={()=> setModalsCheckout(modalCheckout ? false : true) } type="button" class="btn btn-primary btn-lg btn-block">Checkout</button>
-                        <button onClick={()=> setSlide(slideBack ? false : true)}  type="button" class="btn btn-secondary btn-lg btn-block">Cencel</button>
+                        <button onClick={()=> setModalsCheckout(modalCheckout ? false : true) } type="button" className="btn btn-primary btn-lg btn-block">Checkout</button>
+                        <button onClick={()=> setSlide(slideBack ? false : true)}  type="button" className="btn btn-secondary btn-lg btn-block">Cencel</button>
                     </div>
                 </div> :
                 <div className="cartBar" style={{height: height}}>
@@ -137,86 +149,28 @@ const Home = () => {
                 </div>
             } 
             <div className="content cf">
-                <div className="listContent">
+                {
+                    dataProduct.map(post=>{
+                        return(
+                            <div key={post.id_product} className="listContent">
+                                <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                                    <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
+                                </div>
+                                <img onClick={()=> setSlide(slideBack ? false : true)} className="imgContent" src={post.image} alt=""/>
+                                <p className="titleImg">{post.product_name}</p>
+                                <p className="price">Rp. {post.price}</p>
+                            </div> 
+                        )
+                    })
+                }
+                {/* <div className="listContent">
                     <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
                         <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
                     </div>
                     <img onClick={()=> setSlide(slideBack ? false : true)} className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
                     <p className="titleImg">Wiener Schnitzel</p>
                     <p className="price">Rp. 69.000</p>
-                </div>  
-                <div className="listContent">
-                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
-                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
-                    </div>
-                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/unnamed.jpg')} alt=""/>
-                    <p className="titleImg">Wiener Schnitzel</p>
-                    <p className="price">Rp. 69.000</p>
-                </div>  
-                <div className="listContent">
-                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
-                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
-                    </div>
-                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
-                    <p className="titleImg">Wiener Schnitzel</p>
-                    <p className="price">Rp. 69.000</p>
-                </div>    
-                <div className="listContent">
-                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
-                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
-                    </div>
-                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/theshackbook2.jpg')} alt=""/>
-                    <p className="titleImg">Wiener Schnitzel</p>
-                    <p className="price">Rp. 69.000</p>
-                </div>
-                <div className="listContent">
-                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
-                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
-                    </div>
-                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
-                    <p className="titleImg">Wiener Schnitzel</p>
-                    <p className="price">Rp. 69.000</p>
-                </div>
-                <div className="listContent">
-                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
-                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
-                    </div>
-                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
-                    <p className="titleImg">Wiener Schnitzel</p>
-                    <p className="price">Rp. 69.000</p>
-                </div>
-                <div className="listContent">
-                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
-                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
-                    </div>
-                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
-                    <p className="titleImg">Wiener Schnitzel</p>
-                    <p className="price">Rp. 69.000</p>
-                </div>
-                <div className="listContent">
-                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
-                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
-                    </div>
-                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
-                    <p className="titleImg">Wiener Schnitzel</p>
-                    <p className="price">Rp. 69.000</p>
-                </div>
-                <div className="listContent">
-                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
-                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
-                    </div>
-                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
-                    <p className="titleImg">Wiener Schnitzel</p>
-                    <p className="price">Rp. 69.000</p>
-                </div>
-                <div className="listContent">
-                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
-                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
-                    </div>
-                    <img onClick={()=> setSlide(slideBack ? false : true)}  className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
-                    <p className="titleImg">Wiener Schnitzel</p>
-                    <p className="price">Rp. 69.000</p>
-                </div>
+                </div>   */}
             </div>
             <div 
             // onClick={()=> setModals(modal ? false : true)} 
@@ -225,21 +179,21 @@ const Home = () => {
                     <div className="content-modal">
                         <h3 className="titleAdd">Add Product</h3>
                         <div className="formInput">
-                            <label className="labelInput" for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control inputAdd" id="exampleInputEmail1" aria-describedby="emailHelp"></input>
-                            <label className="labelInput" for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control inputAdd" id="exampleInputEmail1" aria-describedby="emailHelp"></input>
-                            <label className="labelInput" for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control inputAdd" id="exampleInputEmail1" aria-describedby="emailHelp"></input>
-                            <label className="labelInput" for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control inputAdd" id="exampleInputEmail1" aria-describedby="emailHelp"></input>
+                            <label className="labelInput">Email address</label>
+                            <input type="email" className="form-control inputAdd" aria-describedby="emailHelp"></input>
+                            <label className="labelInput">Email address</label>
+                            <input type="email" className="form-control inputAdd" aria-describedby="emailHelp"></input>
+                            <label className="labelInput">Email address</label>
+                            <input type="email" className="form-control inputAdd" aria-describedby="emailHelp"></input>
+                            <label className="labelInput">Email address</label>
+                            <input type="email" className="form-control inputAdd" aria-describedby="emailHelp"></input>
                             
-                            <div class="custom-file chooseFile">
-                                <input type="file" class="custom-file-input" id="customFile"/>
-                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            <div className="custom-file chooseFile">
+                                <input type="file" className="custom-file-input" id="customFile"/>
+                                <label className="custom-file-label">Choose file</label>
                             </div>
-                            <button onClick={()=> setModals(modal ? false : true)}  type="button" class="btn btn-cancel-add">Cancel</button>
-                            <button type="button" class="btn btn-ok-add">Add</button>
+                            <button onClick={()=> setModals(modal ? false : true)}  type="button" className="btn btn-cancel-add">Cancel</button>
+                            <button type="button" className="btn btn-ok-add">Add</button>
                         </div>
                     </div>
                 </div>
@@ -251,11 +205,11 @@ const Home = () => {
                     <div className="box-content-checkout">
                         <ComponentToPrint ref={componentRef} />
                         <ReactToPrint
-                                trigger={() => <button type="button" class="btn btn-checkout-print btn-lg btn-block">Print</button>}
+                                trigger={() => <button type="button" className="btn btn-checkout-print btn-lg btn-block">Print</button>}
                                 content={() => componentRef.current}
                             />
                         <p>Or</p>
-                        <button type="button" class="btn btn-checkout-send btn-lg btn-block">Send Email</button>
+                        <button type="button" className="btn btn-checkout-send btn-lg btn-block">Send Email</button>
                     </div>
                 </div>
             </div>
@@ -263,4 +217,10 @@ const Home = () => {
     )
 }
 
-export default Home;
+const mapState = (product)=>{
+    return(
+        product
+    );
+}
+
+export default connect(mapState)(Home);
