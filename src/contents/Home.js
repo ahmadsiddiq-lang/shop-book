@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect, useRef} from 'react';
-import EventListener from 'react-event-listener'
+import EventListener from 'react-event-listener';
 import './Home.css';
 import ReactToPrint from 'react-to-print';
 import {getProduct} from '../redux/action/product';
@@ -27,13 +28,26 @@ const Home = () => {
 
     const getAllProduct = async ()=>{
         const data = await dispatch(getProduct());
-        setdataProduct(data.value.data);
+        const dataBook = data.value.data
+        let dataNew = []
+        dataBook.forEach(data=>{
+            // rupiah
+            const rupiah = (number)=>{
+                var reverse = number.toString().split('').reverse().join(''),
+                thousand = reverse.match(/\d{1,3}/g);
+                thousand = thousand.join('.').split('').reverse().join('');
+                return thousand;
+            }
+            const number = data.price
+            dataNew.push({...data, rupiah: rupiah(number)})
+        })
+        setdataProduct(dataNew);
     }
 
-    useEffect(()=>{dataCart()})
-    useEffect(()=> {getAllProduct()},[])
-    // useEffect(()=>console.log(dataProduct))
-
+    useEffect(()=>{
+        dataCart()
+        getAllProduct()
+    }, [])
     class ComponentToPrint extends React.Component {
         render() {
           return (
@@ -158,22 +172,13 @@ const Home = () => {
                                 </div>
                                 <img onClick={()=> setSlide(slideBack ? false : true)} className="imgContent" src={post.image} alt=""/>
                                 <p className="titleImg">{post.product_name}</p>
-                                <p className="price">Rp. {post.price}</p>
+                                <p className="price">Rp. {post.rupiah}</p>
                             </div> 
                         )
                     })
                 }
-                {/* <div className="listContent">
-                    <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
-                        <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
-                    </div>
-                    <img onClick={()=> setSlide(slideBack ? false : true)} className="imgContent" src={require('../asset/img/wiener.png')} alt=""/>
-                    <p className="titleImg">Wiener Schnitzel</p>
-                    <p className="price">Rp. 69.000</p>
-                </div>   */}
             </div>
             <div 
-            // onClick={()=> setModals(modal ? false : true)} 
             className={modal ? "modal" : "modals modalActive"}>
                 <div className="box-modal">
                     <div className="content-modal">

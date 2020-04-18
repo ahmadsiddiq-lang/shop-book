@@ -9,6 +9,14 @@
     font-family: AirbnbCerealMedium;
 }
 
+.bodyContent{
+    position: absolute;
+    /* border: 2px solid; */
+    width: 100%;
+    height: 100%;
+    background-color: rgb(235, 235, 235);
+}
+
 .titleList{
     position: absolute;
     left: 33%;
