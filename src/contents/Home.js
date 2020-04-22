@@ -2,9 +2,10 @@
 import React, {useState, useEffect, useRef} from 'react';
 import EventListener from 'react-event-listener';
 import './Home.css';
+import Axios from 'axios';
 import ReactToPrint from 'react-to-print';
-import {getProduct} from '../redux/action/product';
-import { useDispatch, connect } from 'react-redux';
+import {getProduct, insertCart, getCart, deleteCart} from '../redux/action/product';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Home = () => {
     const [height, setHeight] = useState(window.innerHeight - 80)
@@ -13,39 +14,78 @@ const Home = () => {
     const [slideBack, setSlide] = useState(false)
     const [modal, setModals] = useState(true)
     const [modalCheckout, setModalsCheckout] = useState(true)
-    const [cart, setCart] = useState(0)
-    const [dataProduct, setdataProduct] = useState([])
+    const [qty, setQty] = useState({})
     const componentRef = useRef();
     const resize = () => {
         setHeight(window.innerHeight - 80)
     }
-
-    const dataCart = () => {
-        setCart(2)
-    }
-
+    const dataCart = useSelector(state => state.dataCart)
+    const dataProduct = useSelector(state => state.dataProduct)
     const dispatch = useDispatch();
 
-    const getAllProduct = async ()=>{
-        const data = await dispatch(getProduct());
-        const dataBook = data.value.data
-        let dataNew = []
-        dataBook.forEach(data=>{
-            // rupiah
-            const rupiah = (number)=>{
-                var reverse = number.toString().split('').reverse().join(''),
-                thousand = reverse.match(/\d{1,3}/g);
-                thousand = thousand.join('.').split('').reverse().join('');
-                return thousand;
+    const getAllCart = async () => {
+        Axios.get("http://192.168.1.12:4000/getcart").then(resolve => {
+            dispatch(getCart(resolve))
+
+            // for set qty
+            if (resolve.data.length > 0) {
+                const con = {}
+                resolve.data.forEach((x, i) => {
+                    con[x.id_product] = 1
+                })
+                setQty(con)
             }
-            const number = data.price
-            dataNew.push({...data, rupiah: rupiah(number)})
         })
-        setdataProduct(dataNew);
+    }
+
+    // conver to rupiah
+    const rupiah = (number)=>{
+        var reverse = number.toString().split('').reverse().join(''),
+        thousand = reverse.match(/\d{1,3}/g);
+        thousand = thousand.join('.').split('').reverse().join('');
+        return thousand;
+    }
+
+    const deleteCarts = (id_cart)=>{
+        dispatch(deleteCart(id_cart))
+        getAllCart()
+    }
+
+    const getAllProduct = async ()=>{
+        await dispatch(getProduct());
+    }
+
+    const tickActive = (post)=>{
+        if(dataCart.length > 0){
+            dataCart.forEach(data=>{
+                if(data.id_product !== post.id_product){
+                    // console.log(post.id_product)
+                    setQty({...qty, [post.id_product]: 1}) 
+                    document.getElementById(post.id_product).setAttribute('style','display:block');
+                    dispatch(insertCart(post))
+                }else{
+                    alert('Data ada')
+                }
+            })
+        }else{
+            dispatch(insertCart(post))
+            document.getElementById(post.id_product).setAttribute('style','display:block');
+            setQty({...qty, [post.id_product]: 1}) 
+        }
+        // console.log({...qty, [post.id_product]: 1})
+    }
+
+    const qtyCountPlus = (data)=>{
+        setQty({...qty, [data.id_product]: qty[data.id_product] + 1})
+    }
+    const qtyCountMinus = (data)=>{
+        if(qty[data.id_product] > 1){
+            setQty({...qty, [data.id_product]: qty[data.id_product] - 1})
+        }
     }
 
     useEffect(()=>{
-        dataCart()
+        getAllCart()
         getAllProduct()
     }, [])
     class ComponentToPrint extends React.Component {
@@ -87,11 +127,11 @@ const Home = () => {
                 <img className="imgSearch" onClick={()=> setTrans(transInput ? false : true)} src={require('../asset/img/search.png')} alt=""/>
                 <div className="cartHeader">
                     <h1 className="title">Cart</h1>
-                    <div className="elipse">{cart}</div>
+                    <div className="elipse">{dataCart ? dataCart.length : 0}</div>
                 </div>
             </div>
             <div className="sideBar" style={{height: height}}>
-                <img className="iconBar" src={require('../asset/img/spoon.png')} alt=""/>
+                <img onClick={()=>{console.log(dataCart)}} className="iconBar" src={require('../asset/img/spoon.png')} alt=""/>
                 <img className="iconBar" src={require('../asset/img/catalog.png')} alt=""/>
                 <img onClick={()=> setModals(modal ? false : true)} className="iconBar" src={require('../asset/img/add.png')} alt=""/>
             </div>
@@ -115,37 +155,32 @@ const Home = () => {
                 </div>
             </div>
             {
-                cart ? 
+                dataCart.length !== 0 ?  
                 <div className="cartBar" style={{height: height}}>
                     <div className="ContentCart">
-                        <div className="listCart">
-                            <img className="imgCartList" src={require('../asset/img/theshackbook2.jpg')} alt=""/>
-                            <h5 className="titleProductCart">Wiener Schnitzel</h5>
-                            <div className="boxPrice">
-                                <div className="addqty">
-                                    <div className="plus">+</div>
-                                    <span className="qty">1</span>
-                                    <div className="minus">-</div>
-                                </div>
-                                <div className="pricelistcart">
-                                    <p>Rp. 69.000</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="listCart">
-                        <img className="imgCartList" src={require('../asset/img/theshackbook2.jpg')} alt=""/>
-                            <h5 className="titleProductCart">Wiener Schnitzel</h5>
-                            <div className="boxPrice">
-                                <div className="addqty">
-                                    <div className="plus">+</div>
-                                    <span className="qty">1</span>
-                                    <div className="minus">-</div>
-                                </div>
-                                <div className="pricelistcart">
-                                    <p>Rp. 69.000</p>
-                                </div>
-                            </div>
-                        </div>
+                        {
+                             dataCart.length > 0 ? (dataCart.map(post=>{
+                                return(
+                                    <div key={post.id_cart} className="listCart">
+                                        <div className="boxDelete">
+                                            <div onClick={()=>{deleteCarts(post.id_cart)}} className="deleteCart">X</div>
+                                        </div>
+                                        <img className="imgCartList" src={post.image} alt=""/>
+                                        <h5 className="titleProductCart">{post.product_name}</h5>
+                                        <div className="boxPrice">
+                                            <div className="addqty">
+                                                <div onClick={()=>{qtyCountMinus(post)}} className="plus">-</div>
+                                                <span id={post.id_cart} className="qty">{qty[post.id_product]}</span>
+                                                <div onClick={()=>{qtyCountPlus(post)}} className="minus">+</div>
+                                            </div>
+                                            <div className="pricelistcart">
+                                                <p>Rp. {rupiah(post.price)}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })) : <p>Loading...</p>
+                        }
                     </div>
                     <div className="btnCart">
                         <div className="boxTotalprice">
@@ -161,18 +196,18 @@ const Home = () => {
                     <h3>Your cart is empty</h3>
                     <p className="textCart">Please add some items from the menu</p>
                 </div>
-            } 
+            }
             <div className="content cf">
                 {
                     dataProduct.map(post=>{
                         return(
                             <div key={post.id_product} className="listContent">
-                                <div className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                                <div id={post.id_product} className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
                                     <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
                                 </div>
-                                <img onClick={()=> setSlide(slideBack ? false : true)} className="imgContent" src={post.image} alt=""/>
+                                <img onClick={()=> tickActive(post)} className="imgContent" src={post.image} alt=""/>
                                 <p className="titleImg">{post.product_name}</p>
-                                <p className="price">Rp. {post.rupiah}</p>
+                                <p className="price">Rp. {rupiah(post.price)}</p>
                             </div> 
                         )
                     })
@@ -222,10 +257,10 @@ const Home = () => {
     )
 }
 
-const mapState = (product)=>{
-    return(
-        product
-    );
-}
+// const mapState = ({dataProduc})=>{
+//     return(
+//         dataProduc
+//     );
+// }
 
-export default connect(mapState)(Home);
+export default Home
