@@ -631,6 +631,16 @@
     padding: 8px 20px;
 }
 
+.theader{
+    font-weight: bold;
+    text-align: center;
+}
+
+.ppn{
+    margin-top: 20px;
+    
+}
+
 .total-price{
     margin-top: 10px;
     font-weight: bold;

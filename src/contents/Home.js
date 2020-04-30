@@ -17,7 +17,9 @@ const Home = () => {
     const [sidBarBox, setBar] = useState(false)
     const [modal, setModals] = useState(true)
     const [modalCheckout, setModalsCheckout] = useState(true)
-    const [qty, setQty] = useState({})
+    const [qty, setQty] = useState({});
+    const [cart, setCart] = useState({});
+    const [totalPrice, setTotal] = useState(0);
     const [dataIdCart, setIdCart] = useState({})
     const componentRef = useRef();
     const history = useHistory();
@@ -37,7 +39,6 @@ const Home = () => {
     const getAllCart = async () => {
         Axios.get(BASE_URL+"/getcart").then(resolve => {
             dispatch(getCart(resolve))
-
             // for set qty
             if (resolve.data.length > 0) {
                 const con = {}
@@ -46,6 +47,7 @@ const Home = () => {
                 })
                 setQty(con)
             }
+            
         })
     }
 
@@ -74,20 +76,33 @@ const Home = () => {
         await dispatch(getProduct());
     }
 
+    const totals = ()=>{
+        if(dataCart.length > 0){
+            let total = 0
+            dataCart.forEach(data=>{
+                const x = data.price * qty[data.id_product]
+                total += x
+            })
+            if(total > 0){
+                setTotal(total)
+            }
+        }
+    }
+
     const tickActive = (post)=>{
         if(dataCart.length > 0){
             let status = false
             dataCart.forEach(data=>{
                 if(data.id_product === post.id_product){
                     status = true
-                    console.log('data ada')
                 }
             })
             if(status === false){
-                console.log('masuk')
                 setQty({...qty, [post.id_product]: 1}) 
                 document.getElementById(post.id_product).setAttribute('style','display:block');
                 dispatch(insertCart(post))
+            }else{
+                alert('data sudah ada')
             }
         }else{
             dispatch(insertCart(post))
@@ -98,12 +113,22 @@ const Home = () => {
 
     const qtyCountPlus = (data)=>{
         setQty({...qty, [data.id_product]: qty[data.id_product] + 1})
+        const datax = {...cart,[data.id_product]:[data.price] * (qty[data.id_product]+1)}
+        setCart(datax)
     }
     const qtyCountMinus = (data)=>{
         if(qty[data.id_product] > 1){
             setQty({...qty, [data.id_product]: qty[data.id_product] - 1})
+            const datax = {...cart,[data.id_product]:[data.price] * (qty[data.id_product]-1)}
+            setCart(datax)
         }
     }
+    const handelPpn = (number)=>{
+        const fix = 10 * number / 100
+        return fix;
+    }
+
+    useEffect(()=>{totals()})
 
     useEffect(()=>{
         getAllCart()
@@ -118,17 +143,26 @@ const Home = () => {
                     <p className="name-cashier">Cashier :  Pevita Pearce</p>
                     <table className="tabel-ckecout">
                         <tbody>
-                            <tr>
-                                <td>Coffee Latte 1x</td>
-                                <td>Rp. 15.000</td>
+                            <tr className="theader">
+                                <td>Product Name</td>
+                                <td>Count</td>
+                                <td>Price</td>
                             </tr>
-                            <tr>
-                                <td>Ppn 10%</td>
-                                <td>Rp. 10.500</td>
-                            </tr>
+                            {
+                                dataCart.map(post=>{
+                                    return(
+                                        <tr>
+                                            <td>{post.product_name}</td>
+                                            <td>{qty[post.id_product]}X</td>
+                                            <td>Rp. {rupiah(cart[post.id_product] > post.price ? cart[post.id_product] : post.price)}</td>
+                                        </tr>
+                                    )
+                                })
+                            }
                         </tbody>
                     </table>
-                    <p className="total-price">Total : Rp. 115.500</p>
+                    <p className="ppn">Ppn 10% : Rp. {handelPpn(totalPrice)}</p>
+                    <p className="total-price">Total : Rp. {rupiah(totalPrice + handelPpn(totalPrice))}</p>
                     <p className="payment">Payment: Cash</p>
             </div>
           );
@@ -195,7 +229,7 @@ const Home = () => {
                                                 <div onClick={()=>{qtyCountPlus(post)}} className="minus">+</div>
                                             </div>
                                             <div className="pricelistcart">
-                                                <p>Rp. {rupiah(post.price)}</p>
+                                                <p>Rp. {rupiah(cart[post.id_product] > post.price ? cart[post.id_product] : post.price)}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -205,7 +239,7 @@ const Home = () => {
                     </div>
                     <div className="btnCart">
                         <div className="boxTotalprice">
-                            <h6 className="titleTotalprice">Total : <span className="totalPrice">Rp. 105.000</span></h6>
+                            <h6 className="titleTotalprice">Total : <span className="totalPrice">Rp. {rupiah(totalPrice)}</span></h6>
                         </div>
                         <p className="texPPN">* Belum termasuk PPN</p>
                         <button onClick={()=> setModalsCheckout(modalCheckout ? false : true) } type="button" className="btn btn-primary btn-lg btn-block">Checkout</button>
