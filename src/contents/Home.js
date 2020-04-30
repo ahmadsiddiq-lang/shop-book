@@ -20,6 +20,7 @@ const Home = () => {
     const [qty, setQty] = useState({});
     const [cart, setCart] = useState({});
     const [totalPrice, setTotal] = useState(0);
+    const [product, setProduct] = useState('')
     const [dataIdCart, setIdCart] = useState({})
     const componentRef = useRef();
     const history = useHistory();
@@ -90,31 +91,40 @@ const Home = () => {
     }
 
     const tickActive = (post)=>{
-        if(dataCart.length > 0){
-            let status = false
-            dataCart.forEach(data=>{
-                if(data.id_product === post.id_product){
-                    status = true
+        if(post.stock > 0){
+            if(dataCart.length > 0){
+                let status = false
+                dataCart.forEach(data=>{
+                    if(data.id_product === post.id_product){
+                        status = true
+                    }
+                })
+                if(status === false){
+                    setQty({...qty, [post.id_product]: 1}) 
+                    document.getElementById(post.id_product).setAttribute('style','display:block');
+                    dispatch(insertCart(post))
+                }else{
+                    alert('data sudah ada')
                 }
-            })
-            if(status === false){
-                setQty({...qty, [post.id_product]: 1}) 
-                document.getElementById(post.id_product).setAttribute('style','display:block');
-                dispatch(insertCart(post))
             }else{
-                alert('data sudah ada')
+                dispatch(insertCart(post))
+                document.getElementById(post.id_product).setAttribute('style','display:block');
+                setQty({...qty, [post.id_product]: 1}) 
             }
         }else{
-            dispatch(insertCart(post))
-            document.getElementById(post.id_product).setAttribute('style','display:block');
-            setQty({...qty, [post.id_product]: 1}) 
+            alert('Stock Habis')
         }
     }
 
     const qtyCountPlus = (data)=>{
-        setQty({...qty, [data.id_product]: qty[data.id_product] + 1})
-        const datax = {...cart,[data.id_product]:[data.price] * (qty[data.id_product]+1)}
-        setCart(datax)
+        const maxinput = qty[data.id_product] + 1
+        if(maxinput <= data.stock){
+            setQty({...qty, [data.id_product]: qty[data.id_product] + 1})
+            const datax = {...cart,[data.id_product]:[data.price] * (qty[data.id_product]+1)}
+            setCart(datax)
+        }else{
+            alert('Stock tidak cukup')
+        }
     }
     const qtyCountMinus = (data)=>{
         if(qty[data.id_product] > 1){
@@ -127,6 +137,33 @@ const Home = () => {
         const fix = 10 * number / 100
         return fix;
     }
+
+    const handleInput =(e)=>{
+        let formProductNew={...product};
+        if(e.target.name==='image'){
+            formProductNew[e.target.name]=e.target.files[0];
+        }else{
+            formProductNew[e.target.name]=e.target.value;
+        }
+        setProduct(formProductNew)
+        // console.log(formProductNew)
+    }
+
+    const inputProduct =()=>{
+        // console.log(product)
+        const data = new FormData();
+        data.append('image', product.image)
+        data.set('product_name', product.product_name)
+        data.set('description', product.description)
+        data.set('category', product.category)
+        data.set('price', product.price)
+        data.set('stock', product.stock)
+
+        Axios.post(BASE_URL+'/insert', data)
+        .then(res=>{
+            alert('Success...!')
+        }).catch(err=>console.log(err))
+    }   
 
     useEffect(()=>{totals()})
 
@@ -149,15 +186,15 @@ const Home = () => {
                                 <td>Price</td>
                             </tr>
                             {
-                                dataCart.map(post=>{
+                                dataCart.length > 0 ? (dataCart.map(post=>{
                                     return(
-                                        <tr>
+                                        <tr key={post.id_product}>
                                             <td>{post.product_name}</td>
                                             <td>{qty[post.id_product]}X</td>
                                             <td>Rp. {rupiah(cart[post.id_product] > post.price ? cart[post.id_product] : post.price)}</td>
                                         </tr>
                                     )
-                                })
+                                })):false
                             }
                         </tbody>
                     </table>
@@ -274,21 +311,28 @@ const Home = () => {
                     <div className="content-modal">
                         <h3 className="titleAdd">Add Product</h3>
                         <div className="formInput">
-                            <label className="labelInput">Email address</label>
-                            <input type="email" className="form-control inputAdd" aria-describedby="emailHelp"></input>
-                            <label className="labelInput">Email address</label>
-                            <input type="email" className="form-control inputAdd" aria-describedby="emailHelp"></input>
-                            <label className="labelInput">Email address</label>
-                            <input type="email" className="form-control inputAdd" aria-describedby="emailHelp"></input>
-                            <label className="labelInput">Email address</label>
-                            <input type="email" className="form-control inputAdd" aria-describedby="emailHelp"></input>
-                            
+                            <label className="labelInput">Product Name</label>
+                            <input name="product_name" onChange={handleInput} type="text" className="form-control inputAdd" aria-describedby="emailHelp"></input>
+                            <label className="labelInput">Description</label>
+                            <input name="description" onChange={handleInput} type="text" className="form-control inputAdd" aria-describedby="emailHelp"></input>
+                            <label className="labelInput">Category</label>
+                            <select name="category" onChange={handleInput} className="form-control" id="exampleFormControlSelect1">
+                                <option>Select</option>
+                                <option value="Book">Book</option>
+                                <option value="Pakaian">Pakaian</option>
+                                <option value="Elektronik">Elektronik</option>
+                                <option value="Kendaraan">Kendaraan</option>
+                            </select>
+                            <label className="labelInput">Price</label>
+                            <input name="price" onChange={handleInput} type="number" className="form-control inputAdd" aria-describedby="emailHelp"></input>
+                            <label className="labelInput">Stock</label>
+                            <input name="stock" onChange={handleInput} type="number" className="form-control inputAdd" aria-describedby="emailHelp"></input>
                             <div className="custom-file chooseFile">
-                                <input type="file" className="custom-file-input" id="customFile"/>
+                                <input name="image" onChange={handleInput} type="file" className="custom-file-input" id="customFile"/>
                                 <label className="custom-file-label">Choose file</label>
                             </div>
                             <button onClick={()=> setModals(modal ? false : true)}  type="button" className="btn btn-cancel-add">Cancel</button>
-                            <button type="button" className="btn btn-ok-add">Add</button>
+                            <button onClick={()=>inputProduct()} type="button" className="btn btn-ok-add">Add</button>
                         </div>
                     </div>
                 </div>
