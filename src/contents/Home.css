@@ -11,10 +11,12 @@
 
 .bodyContent{
     position: absolute;
+    /* border: 2px solid; */
     width: 100%;
     height: 100%;
     background-color: rgb(235, 235, 235);
 }
+
 .titleList{
     position: absolute;
     left: 33%;
@@ -27,6 +29,7 @@
     text-align: center;
     z-index: 1;
     position: fixed;
+    top: 0;
 }
 .cartHeader{
     position: absolute;
@@ -136,11 +139,13 @@
 }
 
 .content{
+    /* border: 2px solid; */
     width: 69%;
     max-width: 69%;
     margin-top: 80px;
     margin-left: 80px;
     background-color: rgb(235, 235, 235);
+    padding-bottom: 10px;
 }
 
 .listContent{
@@ -193,9 +198,10 @@
 }
 
 .sidebarBox{
-    position: absolute;
+    position: fixed;
     height: 100%;
     width: 15%;
+    top: 0;
     left: -40%;
     background: #FFFFFF;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
@@ -204,11 +210,12 @@
 }
 
 .activeBar{
+    top: 0;
     left: 0;
 }
 
 .backSide{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
@@ -245,6 +252,12 @@
 }
 .boxIcon{
     border-bottom: 1px solid rgb(226, 226, 226);
+    cursor: pointer;
+    transition: .3s;
+}
+
+.boxIcon:hover{
+    background-color: rgb(235, 235, 235);
 }
 
 .titleIcon{
@@ -281,18 +294,51 @@
     margin-left: 5px;
 }
 
+.boxDelete{
+    position: absolute;
+    z-index: 9;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    opacity: 0;
+    transition: .5s;
+}
+
+.boxDelete:hover{
+    opacity: 1;
+}
+
+.deleteCart{
+    position: absolute;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.24);
+    line-height: 85px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    cursor: pointer;
+}
+
 .titleProductCart{
-    margin-left: 10%;
+    position: absolute;
+    left: 80px;
+    margin-left: 12px;
     margin-top: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    max-height: 38px;
+    overflow: hidden;
 }
 
 .boxPrice{
     position: absolute;
-    right: 0;
+    right: 10px;
     bottom: 0;
     display: flex;
     /* border: 1px solid; */
     width: 65%;
+    background-color: white;
 }
 
 .addqty{
@@ -343,7 +389,9 @@
 }
 
 .imgCartList{
-    max-width: 100px;
+    /* width: 70px; */
+    max-width: 90px;
+    max-height: 86px;
 }
 
 .btnCart{
@@ -379,8 +427,8 @@
 }
 
 .btn-primary:hover{
-    background-color: rgb(25, 152, 163);
-    border-color: rgb(25, 152, 163);
+    background-color: rgb(51, 184, 196);
+    border-color: rgb(51, 184, 196);
 }
 
 .btn-primary:focus{
@@ -394,11 +442,227 @@
 }
 
 .btn-secondary:hover{
-    background-color: rgb(168, 10, 68);
-    border-color: rgb(168, 10, 68);
+    background-color: rgb(209, 52, 110);
+    border-color: rgb(209, 52, 110);
 }
 
 .btn-secondary:focus{
     background-color: rgb(168, 10, 68);
     border-color: rgb(168, 10, 68);
+}
+
+.modals{
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.589);
+    align-content: center;
+}
+
+.modalActive{
+    display: block;
+}
+
+.content-modal{
+    width: 40%;
+    height: 70%;
+    background-color: white;
+    z-index: 999;
+    margin: auto;
+    text-align: center;
+    margin-top: 5%;
+    border-radius: 4px;
+}
+
+.titleAdd{
+    padding: 10px;
+    border-bottom: 2px solid rgb(192, 192, 192);
+}
+
+.formInput{
+    /* border: 2px solid; */
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    text-align: left;
+    position: relative;
+    
+}
+
+.labelInput{
+    margin-top: 10px;
+}
+
+.chooseFile{
+ margin-top: 20px;
+ margin-bottom: 60px;
+}
+
+.btn-ok-add{
+    position: absolute;
+    right: 0;
+    background-color: #57CAD5;
+    bottom: 10px;
+    width: 80px;
+    color: white;
+}
+
+.btn-ok-add:hover{
+    background-color: rgb(38, 179, 192);
+    color: white;
+}
+
+.btn-ok-add:focus{
+    background-color: rgb(29, 140, 150);
+    color: white;
+}
+
+.btn-cancel-add{
+    position: absolute;
+    background-color: #F24F8A;
+    right: 90px;
+    bottom: 10px;
+    color: white;
+}
+
+.btn-cancel-add:hover{
+    background-color: rgb(214, 68, 122);
+    color: white;
+}
+.btn-cancel-add:focus{
+    background-color: rgb(175, 52, 97);
+    color: white;
+}
+
+.modal-checkout{
+    display: none;
+}
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.589);
+    z-index: 999;
+}
+
+.modal-checkout-active{
+    display: block;
+}
+
+.content-modal-checkout{
+    position: fixed;
+    top: 0;
+    left: 30%;
+    width: 40%;
+    background-color: white;
+    z-index: 999;
+    margin: auto;
+    margin-top: 5%;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.box-content-checkout{
+    margin: auto;
+    width: 90%;
+    height: 100%;
+    /* border: 2px solid; */
+}
+
+.h3-checkout{
+    margin-top: 10px;
+}
+
+.btn-checkout-print{
+    background-color: #F24F8A;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.btn-checkout-print:hover{
+    background-color: rgb(209, 52, 110);
+    border-color: rgb(209, 52, 110);
+    color: white;
+}
+.btn-checkout-print:focus{
+    background-color: rgb(168, 10, 68);
+    border-color: rgb(168, 10, 68);
+    color: white;
+}
+
+.btn-checkout-send{
+    background-color: #57CAD5;
+    border-color: #57CAD5;
+    color: white;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+.btn-checkout-send:hover{
+    background-color: rgb(38, 179, 192);
+    border-color: rgb(38, 179, 192);
+    color: white;
+}
+
+.btn-checkout-send:focus{
+    background-color: rgb(29, 140, 150);
+    border-color: rgb(29, 140, 150);
+    color: white;
+}
+
+.note-chackout{
+    margin: auto;
+}
+
+.tabel-ckecout{
+    color: #232323;
+    border-collapse: collapse;
+    margin: auto;
+    text-align: left;
+}
+
+.table1, tr, td {
+    border: 1px solid #999;
+    padding: 8px 20px;
+}
+
+.total-price{
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.close-modal-checkout{
+    position: absolute;
+    color: rgb(179, 179, 179);
+    right: 5px;
+    top: 5px;
+    width: 30px;
+    cursor: pointer;
+}
+
+.close-modal-checkout:hover{
+    color: black;
+}
+
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.cf {
+    *zoom: 1;
 }
