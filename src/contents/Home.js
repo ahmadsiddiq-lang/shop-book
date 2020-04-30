@@ -6,16 +6,21 @@ import Axios from 'axios';
 import ReactToPrint from 'react-to-print';
 import {getProduct, insertCart, getCart, deleteCart} from '../redux/action/product';
 import { useDispatch, useSelector } from 'react-redux';
+import { Button, Modal } from 'react-bootstrap';
+import {useHistory} from 'react-router-dom';
+require('dotenv').config()
 
 const Home = () => {
+    const BASE_URL = 'http://192.168.1.12:4000';
     const [height, setHeight] = useState(window.innerHeight - 80)
     const [transInput, setTrans] = useState(false)
     const [sidBarBox, setBar] = useState(false)
-    const [slideBack, setSlide] = useState(false)
     const [modal, setModals] = useState(true)
     const [modalCheckout, setModalsCheckout] = useState(true)
     const [qty, setQty] = useState({})
+    const [dataIdCart, setIdCart] = useState({})
     const componentRef = useRef();
+    const history = useHistory();
     const resize = () => {
         setHeight(window.innerHeight - 80)
     }
@@ -23,8 +28,14 @@ const Home = () => {
     const dataProduct = useSelector(state => state.dataProduct)
     const dispatch = useDispatch();
 
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = (id_cart) => {
+        setIdCart(id_cart)
+        setShow(true);}
+
     const getAllCart = async () => {
-        Axios.get("http://192.168.1.12:4000/getcart").then(resolve => {
+        Axios.get(BASE_URL+"/getcart").then(resolve => {
             dispatch(getCart(resolve))
 
             // for set qty
@@ -46,9 +57,17 @@ const Home = () => {
         return thousand;
     }
 
-    const deleteCarts = (id_cart)=>{
-        dispatch(deleteCart(id_cart))
-        getAllCart()
+    const deleteCarts = ()=>{
+        dispatch(deleteCart(dataIdCart))
+        handleClose()
+        history.push('/')
+    }
+
+    const handleCancel = async()=>{
+        Axios.delete(BASE_URL+('/deleteall/cart'))
+        .then(res=>{
+            history.push('/')
+        }).catch(err=>console.log(err))
     }
 
     const getAllProduct = async ()=>{
@@ -57,22 +76,24 @@ const Home = () => {
 
     const tickActive = (post)=>{
         if(dataCart.length > 0){
+            let status = false
             dataCart.forEach(data=>{
-                if(data.id_product !== post.id_product){
-                    // console.log(post.id_product)
-                    setQty({...qty, [post.id_product]: 1}) 
-                    document.getElementById(post.id_product).setAttribute('style','display:block');
-                    dispatch(insertCart(post))
-                }else{
-                    alert('Data ada')
+                if(data.id_product === post.id_product){
+                    status = true
+                    console.log('data ada')
                 }
             })
+            if(status === false){
+                console.log('masuk')
+                setQty({...qty, [post.id_product]: 1}) 
+                document.getElementById(post.id_product).setAttribute('style','display:block');
+                dispatch(insertCart(post))
+            }
         }else{
             dispatch(insertCart(post))
             document.getElementById(post.id_product).setAttribute('style','display:block');
             setQty({...qty, [post.id_product]: 1}) 
         }
-        // console.log({...qty, [post.id_product]: 1})
     }
 
     const qtyCountPlus = (data)=>{
@@ -155,7 +176,7 @@ const Home = () => {
                 </div>
             </div>
             {
-                dataCart.length !== 0 ?  
+                dataCart.length > 0 ?  
                 <div className="cartBar" style={{height: height}}>
                     <div className="ContentCart">
                         {
@@ -163,7 +184,7 @@ const Home = () => {
                                 return(
                                     <div key={post.id_cart} className="listCart">
                                         <div className="boxDelete">
-                                            <div onClick={()=>{deleteCarts(post.id_cart)}} className="deleteCart">X</div>
+                                            <div onClick={()=>{handleShow(post.id_cart)}} className="deleteCart">X</div>
                                         </div>
                                         <img className="imgCartList" src={post.image} alt=""/>
                                         <h5 className="titleProductCart">{post.product_name}</h5>
@@ -179,7 +200,7 @@ const Home = () => {
                                         </div>
                                     </div>
                                 )
-                            })) : <p>Loading...</p>
+                            })) : false
                         }
                     </div>
                     <div className="btnCart">
@@ -188,7 +209,7 @@ const Home = () => {
                         </div>
                         <p className="texPPN">* Belum termasuk PPN</p>
                         <button onClick={()=> setModalsCheckout(modalCheckout ? false : true) } type="button" className="btn btn-primary btn-lg btn-block">Checkout</button>
-                        <button onClick={()=> setSlide(slideBack ? false : true)}  type="button" className="btn btn-secondary btn-lg btn-block">Cencel</button>
+                        <button onClick={()=> handleCancel()}  type="button" className="btn btn-secondary btn-lg btn-block">Cencel</button>
                     </div>
                 </div> :
                 <div className="cartBar" style={{height: height}}>
@@ -202,7 +223,7 @@ const Home = () => {
                     dataProduct.map(post=>{
                         return(
                             <div key={post.id_product} className="listContent">
-                                <div id={post.id_product} className={slideBack ? "slideBack slideBackActive" : 'slideBack'}>
+                                <div id={post.id_product} className={'slideBack'}>
                                     <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
                                 </div>
                                 <img onClick={()=> tickActive(post)} className="imgContent" src={post.image} alt=""/>
@@ -253,14 +274,22 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                <Modal.Title>DELETE</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete this ?</Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                    Cencel
+                </Button>
+                <Button variant="primary" onClick={()=>deleteCarts()}>
+                    Ok
+                </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     )
 }
 
-// const mapState = ({dataProduc})=>{
-//     return(
-//         dataProduc
-//     );
-// }
-
-export default Home
+export default Home;

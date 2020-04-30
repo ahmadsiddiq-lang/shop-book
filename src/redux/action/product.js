@@ -22,7 +22,6 @@ export const getCart = (data)=>{
     }
 };
 export const deleteCart =(id_cart)=>{
-    console.log('data action '+ id_cart)
     return{
         type: "DELETE_CART",
         payload: Axios.delete(BASE_URL+`/deletecart/${id_cart}`)
