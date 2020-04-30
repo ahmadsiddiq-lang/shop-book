@@ -151,7 +151,7 @@
 .listContent{
     float: left;
     margin-left: 55px;
-    margin-top: 20px;
+    margin-top: 15px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     /* border: 2px solid; */
@@ -629,6 +629,16 @@
 .table1, tr, td {
     border: 1px solid #999;
     padding: 8px 20px;
+}
+
+.theader{
+    font-weight: bold;
+    text-align: center;
+}
+
+.ppn{
+    margin-top: 20px;
+    
 }
 
 .total-price{
