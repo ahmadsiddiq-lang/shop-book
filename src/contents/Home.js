@@ -4,7 +4,7 @@ import EventListener from 'react-event-listener';
 import './Home.css';
 import Axios from 'axios';
 import ReactToPrint from 'react-to-print';
-import {getProduct, insertCart, getCart, deleteCart} from '../redux/action/product';
+import {getProduct, insertCart, getCart, deleteCart, searchData} from '../redux/action/product';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
 import {useHistory} from 'react-router-dom';
@@ -13,6 +13,7 @@ require('dotenv').config()
 const Home = () => {
     const BASE_URL = 'http://192.168.1.12:4000';
     const [height, setHeight] = useState(window.innerHeight - 80)
+    const [showContent, setShowContent] = useState(false)
     const [transInput, setTrans] = useState(false)
     const [sidBarBox, setBar] = useState(false)
     const [modal, setModals] = useState(true)
@@ -22,6 +23,7 @@ const Home = () => {
     const [totalPrice, setTotal] = useState(0);
     const [product, setProduct] = useState('')
     const [dataIdCart, setIdCart] = useState({})
+    const [dataSearch, setDataSearch] = useState('')
     const componentRef = useRef();
     const history = useHistory();
     const resize = () => {
@@ -30,6 +32,10 @@ const Home = () => {
     const dataCart = useSelector(state => state.dataCart)
     const dataProduct = useSelector(state => state.dataProduct)
     const dispatch = useDispatch();
+
+    const [showCheckout, setShowCheckout] = useState(false);
+    const handleCloseCheckout = () => setShowCheckout(false);
+    const handleShowCheckout = () => setShowCheckout(true);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -175,7 +181,7 @@ const Home = () => {
             Axios.patch(BASE_URL+'/update/stock',input)
             .then(res=>{
                 // console.log(res)
-                
+                handleCloseCheckout()
             }).catch(err=>console.log(err))
         })
     }
@@ -183,6 +189,13 @@ const Home = () => {
     const closeCheckOut = ()=>{
         setModalsCheckout(true)
         handleCancel()
+    }
+
+    const handleSearch = async(e)=>{
+        if(e.key === 'Enter'){
+            console.log(dataSearch)
+            dispatch(searchData(dataSearch))
+        }
     }
 
     useEffect(()=>{totals()})
@@ -218,7 +231,7 @@ const Home = () => {
                             }
                         </tbody>
                     </table>
-                    <p className="ppn">Ppn 10% : Rp. {handelPpn(totalPrice)}</p>
+                    <p className="ppn">Ppn 10% : Rp. {rupiah(handelPpn(totalPrice))}</p>
                     <p className="total-price">Total : Rp. {rupiah(totalPrice + handelPpn(totalPrice))}</p>
                     <p className="payment">Payment: Cash</p>
             </div>
@@ -234,8 +247,10 @@ const Home = () => {
         />
             <div className="header">
                 <img src={require('../asset/img/menu.png')} alt="" className="imgMenu" onClick={()=> setBar(sidBarBox ? false : true)} />
-                <h1 className="titleList title">List Items</h1>
-                <input type="text" placeholder="search" className={transInput ? 'inputSearch active' : 'inputSearch'} />
+                {
+                    showContent ? <h1 className="titleList title">List Items</h1> : <h1 className="titleList title">History</h1>
+                }
+                <input onKeyDown={handleSearch} onChange={(e)=>setDataSearch(e.target.value)} type="text" placeholder="search" className={transInput ? 'inputSearch active' : 'inputSearch'} />
                 <img className="imgSearch" onClick={()=> setTrans(transInput ? false : true)} src={require('../asset/img/search.png')} alt=""/>
                 <div className="cartHeader">
                     <h1 className="title">Cart</h1>
@@ -243,8 +258,8 @@ const Home = () => {
                 </div>
             </div>
             <div className="sideBar" style={{height: height}}>
-                <img onClick={()=>{console.log(dataCart)}} className="iconBar" src={require('../asset/img/spoon.png')} alt=""/>
-                <img className="iconBar" src={require('../asset/img/catalog.png')} alt=""/>
+                <img onClick={()=>setShowContent(true)} className="iconBar" src={require('../asset/img/spoon.png')} alt=""/>
+                <img onClick={()=>setShowContent(false)} className="iconBar" src={require('../asset/img/catalog.png')} alt=""/>
                 <img onClick={()=> setModals(modal ? false : true)} className="iconBar" src={require('../asset/img/add.png')} alt=""/>
             </div>
                 <div onClick={()=> setBar(sidBarBox ? false : true)} className={sidBarBox ? 'backSide' : 'backSide slide'}></div>
@@ -253,11 +268,11 @@ const Home = () => {
                     <img src={require('../asset/img/menu.png')} alt="" className="btnMenu" onClick={()=> setBar(sidBarBox ? false : true)} />
                     <h5 className="titleBtnMenu">Menu</h5>
                 </div>
-                <div className="boxIcon">
+                <div onClick={()=>setShowContent(true)} className="boxIcon">
                     <img className="iconBarBox" src={require('../asset/img/spoon.png')} alt=""/>
                     <h5 className="titleIcon">Order</h5>
                 </div>
-                <div className="boxIcon">
+                <div onClick={()=>setShowContent(false)} className="boxIcon">
                     <img className="iconBarBox" src={require('../asset/img/catalog.png')} alt=""/>
                     <h5 className="titleIcon">History</h5>
                 </div>
@@ -299,7 +314,7 @@ const Home = () => {
                             <h6 className="titleTotalprice">Total : <span className="totalPrice">Rp. {rupiah(totalPrice)}</span></h6>
                         </div>
                         <p className="texPPN">* Belum termasuk PPN</p>
-                        <button onClick={()=> checkout() } type="button" className="btn btn-primary btn-lg btn-block">Checkout</button>
+                        <button onClick={handleShowCheckout} type="button" className="btn btn-primary btn-lg btn-block">Checkout</button>
                         <button onClick={()=> handleCancel()}  type="button" className="btn btn-secondary btn-lg btn-block">Cencel</button>
                     </div>
                 </div> :
@@ -311,7 +326,9 @@ const Home = () => {
             }
             <div className="content cf">
                 {
-                    dataProduct.map(post=>{
+                    showContent ?
+                
+                   (dataProduct.length > 0 ? (dataProduct.map(post=>{
                         return(
                             <div key={post.id_product} className="listContent">
                                 <div id={post.id_product} className={'slideBack'}>
@@ -322,8 +339,39 @@ const Home = () => {
                                 <p className="price">Rp. {rupiah(post.price)}</p>
                             </div> 
                         )
-                    })
-                }
+                    })): 
+                        (<div className="box-empty">
+                            <h3 className="product-empty">Product Empty</h3>
+                        </div> )
+                ):(
+                    <>
+                        <div className="box-day">
+                            <div className="content-card">
+                                <p>Today’s Income</p>
+                                <h4>Rp. 1.000.000</h4>
+                                <p>+2% Yesterday</p>
+                            </div>
+                        </div>
+                        <div className="box-mon">
+                            <div className="content-card">
+                                <p>Orders</p>
+                                <h4>3.270</h4>
+                                <p>+5% Last Week</p>
+                            </div>
+                        </div>
+                        <div className="box-year">
+                            <div className="content-card">
+                                <p>This Year’s Income</p>
+                                <h4>Rp. 100.000.000.000</h4>
+                                <p>+10% Last Year</p>
+                            </div>
+                        </div>
+                        <div className="chart">
+                            <h4>Revenue</h4>
+                        </div>
+                    </>
+                )
+            }
             </div>
             <div 
             className={modal ? "modal" : "modals modalActive"}>
@@ -372,6 +420,8 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+
+            {/* modal delete */}
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                 <Modal.Title>DELETE</Modal.Title>
@@ -382,6 +432,22 @@ const Home = () => {
                     Cencel
                 </Button>
                 <Button variant="primary" onClick={()=>deleteCarts()}>
+                    Ok
+                </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* modal confirm checkout */}
+            <Modal show={showCheckout} onHide={handleCloseCheckout}>
+                <Modal.Header closeButton>
+                <Modal.Title>Checkout</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure ?</Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseCheckout}>
+                    Cencel
+                </Button>
+                <Button variant="primary" onClick={()=> checkout()}>
                     Ok
                 </Button>
                 </Modal.Footer>

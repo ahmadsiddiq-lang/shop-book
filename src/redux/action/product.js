@@ -27,3 +27,10 @@ export const deleteCart =(id_cart)=>{
         payload: Axios.delete(BASE_URL+`/deletecart/${id_cart}`)
     }
 };
+export const searchData =(data)=>{
+    console.log(data)
+    return{
+        type: "SEARCH_PRODUCT",
+        payload: Axios.get(BASE_URL+`/searc/${data}`)
+    }
+};

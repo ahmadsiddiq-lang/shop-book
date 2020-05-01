@@ -82,6 +82,27 @@ const reducer = (state = initialValue, action) => {
             isFulfilled: true,
             dataCart: action.payload.data
             };
+        case "SEARCH_PRODUCT_PENDING":
+            return {
+            ...state,
+            isPending: true,
+            isRejected: false,
+            isFulfilled: false
+            };
+        case "SEARCH_PRODUCT_REJECTED":
+            return {
+            ...state,
+            isPending: false,
+            isRejected: true,
+            errMsg: action.payload.data
+            };
+        case "SEARCH_PRODUCT_FULFILLED":
+            return {
+            ...state,
+            isPending: false,
+            isFulfilled: true,
+            dataProduct: action.payload.data
+            };
         default:
             return state;
     }

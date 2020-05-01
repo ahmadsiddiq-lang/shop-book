@@ -473,7 +473,7 @@
     z-index: 999;
     margin: auto;
     text-align: center;
-    margin-top: 5%;
+    margin-top: 2%;
     border-radius: 4px;
 }
 
@@ -658,6 +658,87 @@
 .close-modal-checkout:hover{
     color: black;
 }
+
+.box-empty{
+    margin: auto;
+    text-align: center;
+    margin-top: 20%;
+}
+
+
+.box-day{
+    /* Rectangle 9 */
+
+position: absolute;
+width: 272px;
+height: 135px;
+left: 110px;
+top: 100px;
+
+background: linear-gradient(285.38deg, #FBB2B4 30.05%, rgba(255, 143, 178, 0) 133.19%);
+box-shadow: 10px 15px 10px rgba(255, 143, 178, 0.25);
+border-radius: 10px;
+
+}
+
+.box-mon{
+    /* Rectangle 9 */
+
+position: absolute;
+width: 272px;
+height: 135px;
+left: 415px;
+top: 100px;
+
+background: linear-gradient(285.38deg, #29DFFF 30.05%, rgba(41, 223, 255, 0) 133.19%);
+box-shadow: 10px 15px 10px rgba(41, 223, 255, 0.25);
+border-radius: 10px;
+
+}
+
+.box-year{
+    /* Rectangle 9 */
+
+position: absolute;
+width: 272px;
+height: 135px;
+left: 720px;
+top: 100px;
+
+background: linear-gradient(285.38deg, #AB84C8 30.05%, rgba(241, 201, 236, 0) 133.19%);
+box-shadow: 10px 15px 10px rgba(241, 201, 236, 0.25);
+border-radius: 10px;
+
+}
+
+.content-card{
+    padding: 10px;
+    padding-left: 30px;
+}
+
+.chart{
+    /* Rectangle 10 */
+
+position: absolute;
+width: 64.5%;
+height: 322px;
+left: 110px;
+top: 252px;
+
+background: #FFFFFF;
+box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.25);
+border-radius: 10px;
+
+}
+
+
+
+
+
+
+
+
+
 
 .cf:before,
 .cf:after {
