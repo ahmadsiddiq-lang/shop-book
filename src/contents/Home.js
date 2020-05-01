@@ -16,7 +16,7 @@ const Home = () => {
     const [transInput, setTrans] = useState(false)
     const [sidBarBox, setBar] = useState(false)
     const [modal, setModals] = useState(true)
-    const [modalCheckout, setModalsCheckout] = useState(true)
+    const [modalCheckout, setModalsCheckout] = useState(false)
     const [qty, setQty] = useState({});
     const [cart, setCart] = useState({});
     const [totalPrice, setTotal] = useState(0);
@@ -165,6 +165,26 @@ const Home = () => {
         }).catch(err=>console.log(err))
     }   
 
+    const checkout =()=>{
+        setModalsCheckout(modalCheckout ? false : true)
+        dataCart.forEach(data=>{
+            const input = {
+                id_product: data.id_product,
+                qty: qty[data.id_product]
+            }
+            Axios.patch(BASE_URL+'/update/stock',input)
+            .then(res=>{
+                // console.log(res)
+                
+            }).catch(err=>console.log(err))
+        })
+    }
+
+    const closeCheckOut = ()=>{
+        setModalsCheckout(true)
+        handleCancel()
+    }
+
     useEffect(()=>{totals()})
 
     useEffect(()=>{
@@ -279,7 +299,7 @@ const Home = () => {
                             <h6 className="titleTotalprice">Total : <span className="totalPrice">Rp. {rupiah(totalPrice)}</span></h6>
                         </div>
                         <p className="texPPN">* Belum termasuk PPN</p>
-                        <button onClick={()=> setModalsCheckout(modalCheckout ? false : true) } type="button" className="btn btn-primary btn-lg btn-block">Checkout</button>
+                        <button onClick={()=> checkout() } type="button" className="btn btn-primary btn-lg btn-block">Checkout</button>
                         <button onClick={()=> handleCancel()}  type="button" className="btn btn-secondary btn-lg btn-block">Cencel</button>
                     </div>
                 </div> :
@@ -337,10 +357,10 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className={modalCheckout ? "modal-checkout" : "modal-checkout modal-checkout-active"}>
-                <div onClick={()=> setModalsCheckout(modalCheckout ? false : true)} className="overlay"></div>
+            <div className={modalCheckout ? "modal-checkout modal-checkout-active" : "modal-checkout"}>
+                <div onClick={()=> closeCheckOut()} className="overlay"></div>
                 <div className="content-modal-checkout">
-                    <div onClick={()=> setModalsCheckout(modalCheckout ? false : true)} className="close-modal-checkout">X</div>
+                    <div onClick={()=> closeCheckOut()} className="close-modal-checkout">X</div>
                     <div className="box-content-checkout">
                         <ComponentToPrint ref={componentRef} />
                         <ReactToPrint
