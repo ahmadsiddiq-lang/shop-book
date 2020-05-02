@@ -29,10 +29,13 @@ const Home = () => {
     const [dataOrderTotal, setOrderTotal] = useState('')
     const [dataPersenDay, setPersenDay] = useState('')
     const [dataPersenLstWeek, setPersenLastWeek] = useState('')
+    const [dataPersenYear, setPersenYear] = useState('')
     const [dataAwal, setAwal] = useState('')
     const [dataAkhir, setAkhir] = useState('')
     const [dataOrderAwal, setOrderAwal] = useState('')
     const [dataOrderAkhir, setOrderAkhir] = useState('')
+    const [dataYearAwal, setYearAwal] = useState('')
+    const [dataYearAkhir, setYearAkhir] = useState('')
     const componentRef = useRef();
     const history = useHistory();
     const resize = () => {
@@ -330,16 +333,43 @@ const Home = () => {
         })
         .catch(err=>console.log(err))
     }
+
+
     const getIncomInYear = ()=>{
+        // tahun akhir
         let date_ob = new Date();
         let date_day = date_ob.getFullYear()
         let date = {
             year:date_day
         }
-        // console.log(date);
+
+        // tahun awal
+        let dateLastYear = date_ob.getFullYear()-1
+        // console.log(dateLastYear);
         Axios.post(BASE_URL+'/income/year', date)
-        .then(res=>{
-            setIncomeYear(rupiah(res.data[0].total.toString()))
+        .then(resAkhir=>{
+            setIncomeYear(rupiah(resAkhir.data[0].total.toString()))
+            let dates = {
+                year:dateLastYear
+            }
+            // console.log(dates)
+            Axios.post(BASE_URL+'/income/year', dates)
+            .then(resAwal=>{
+                // console.log('ini res awal '+resAwal.data[0].total)
+
+                const dataAwal = resAwal.data[0].total
+                const dataAkhir = resAkhir.data[0].total
+                setYearAwal(dataAwal);
+                setYearAkhir(dataAkhir);
+                if(dataAkhir > dataAwal){
+                    let persen = (dataAkhir - dataAwal) / dataAwal * 100
+                    setPersenYear(Math.floor(persen))
+                }else{
+                    let persen = (dataAwal - dataAkhir) / dataAwal * 100
+                    setPersenYear(Math.floor(persen))
+                }
+            })
+            .catch(err=>console.log(err))
         })
         .catch(err=>console.log(err))
     }
@@ -519,7 +549,9 @@ const Home = () => {
                             <div className="content-card">
                                 <p>This Year’s Income</p>
                                 <h4>Rp. {dataIncomeYear}</h4>
-                                <p>+10% Last Year</p>
+                                {
+                                    dataYearAwal < dataYearAkhir ? <p>+{dataPersenYear}% Last Year</p> : dataYearAwal > dataYearAkhir ? <p>-{dataPersenYear}% Last Year</p> : <p>0% Last Year</p>
+                                }
                             </div>
                         </div>
                         <div className="chart">
