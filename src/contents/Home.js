@@ -24,6 +24,9 @@ const Home = () => {
     const [product, setProduct] = useState('')
     const [dataIdCart, setIdCart] = useState({})
     const [dataSearch, setDataSearch] = useState('')
+    const [dataIncomeDay, setIncomeDay] = useState('')
+    const [dataIncomeYear, setIncomeYear] = useState('')
+    const [dataOrderTotal, setOrderTotal] = useState('')
     const componentRef = useRef();
     const history = useHistory();
     const resize = () => {
@@ -198,11 +201,64 @@ const Home = () => {
         }
     }
 
+    const getIncomInday = ()=>{
+        let date_ob = new Date();
+        let date_day = date_ob.getFullYear() + "-" + ("0" + (date_ob.getMonth() + 1)).slice(-2) + "-" + ("0" + date_ob.getDate()).slice(-2)
+        let date = {
+            date:date_day
+        }
+        // console.log(date);
+        Axios.post(BASE_URL+'/income/day', date)
+        .then(res=>{
+            setIncomeDay(rupiah(res.data[0].total.toString()))
+        })
+        .catch(err=>console.log(err))
+    }
+    const getOrderInday = ()=>{
+        let date_ob = new Date();
+        let date_day = date_ob.getFullYear() + "-" + ("0" + (date_ob.getMonth() + 1)).slice(-2) + "-" + ("0" + date_ob.getDate()).slice(-2)
+
+        function getLastWeek() {
+            var today = new Date();
+            var lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+            return lastWeek;
+          }
+        let lastWeeks = getLastWeek();
+        let lastweekDisplay = lastWeeks.getFullYear().toString() +'-'+ ("0" + (lastWeeks.getMonth() + 1)).slice(-2) +'-'+ ("0" + lastWeeks.getDate()).slice(-2)
+        let date = {
+            lastweek: lastweekDisplay,
+            newdate:date_day
+        }
+        // console.log(date);
+        Axios.post(BASE_URL+'/orders/total', date)
+        .then(res=>{
+            // console.log(res);
+            setOrderTotal(rupiah(res.data[0].orders.toString()))
+        })
+        .catch(err=>console.log(err))
+    }
+    const getIncomInYear = ()=>{
+        let date_ob = new Date();
+        let date_day = date_ob.getFullYear()
+        let date = {
+            year:date_day
+        }
+        // console.log(date);
+        Axios.post(BASE_URL+'/income/year', date)
+        .then(res=>{
+            setIncomeYear(rupiah(res.data[0].total.toString()))
+        })
+        .catch(err=>console.log(err))
+    }
+
     useEffect(()=>{totals()})
 
     useEffect(()=>{
         getAllCart()
         getAllProduct()
+        getIncomInday()
+        getOrderInday()
+        getIncomInYear()
     }, [])
     class ComponentToPrint extends React.Component {
         render() {
@@ -348,21 +404,21 @@ const Home = () => {
                         <div className="box-day">
                             <div className="content-card">
                                 <p>Today’s Income</p>
-                                <h4>Rp. 1.000.000</h4>
+                                <h4>Rp. {dataIncomeDay}</h4>
                                 <p>+2% Yesterday</p>
                             </div>
                         </div>
                         <div className="box-mon">
                             <div className="content-card">
                                 <p>Orders</p>
-                                <h4>3.270</h4>
+                                <h4>{dataOrderTotal}</h4>
                                 <p>+5% Last Week</p>
                             </div>
                         </div>
                         <div className="box-year">
                             <div className="content-card">
                                 <p>This Year’s Income</p>
-                                <h4>Rp. 100.000.000.000</h4>
+                                <h4>Rp. {dataIncomeYear}</h4>
                                 <p>+10% Last Year</p>
                             </div>
                         </div>
