@@ -169,18 +169,22 @@ const Home = () => {
 
     const inputProduct =()=>{
         // console.log(product)
-        const data = new FormData();
-        data.append('image', product.image)
-        data.set('product_name', product.product_name)
-        data.set('description', product.description)
-        data.set('category', product.category)
-        data.set('price', product.price)
-        data.set('stock', product.stock)
-
-        Axios.post(BASE_URL+'/insert', data)
-        .then(res=>{
-            alert('Success...!')
-        }).catch(err=>console.log(err))
+        if(product.product_name.length > 0 && product.description.length > 0 && product.category.length > 0 && product.price.length > 0 && product.stock.length > 0){
+            const data = new FormData();
+            data.append('image', product.image)
+            data.set('product_name', product.product_name)
+            data.set('description', product.description)
+            data.set('category', product.category)
+            data.set('price', product.price)
+            data.set('stock', product.stock)
+    
+            Axios.post(BASE_URL+'/insert', data)
+            .then(res=>{
+                alert('Success...!')
+            }).catch(err=>console.log(err))
+        }else{
+            alert('Form empty')
+        }
     }   
 
     const checkout =()=>{
