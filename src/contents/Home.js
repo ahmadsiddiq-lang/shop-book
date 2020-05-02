@@ -27,6 +27,12 @@ const Home = () => {
     const [dataIncomeDay, setIncomeDay] = useState('')
     const [dataIncomeYear, setIncomeYear] = useState('')
     const [dataOrderTotal, setOrderTotal] = useState('')
+    const [dataPersenDay, setPersenDay] = useState('')
+    const [dataPersenLstWeek, setPersenLastWeek] = useState('')
+    const [dataAwal, setAwal] = useState('')
+    const [dataAkhir, setAkhir] = useState('')
+    const [dataOrderAwal, setOrderAwal] = useState('')
+    const [dataOrderAkhir, setOrderAkhir] = useState('')
     const componentRef = useRef();
     const history = useHistory();
     const resize = () => {
@@ -187,6 +193,11 @@ const Home = () => {
                 handleCloseCheckout()
             }).catch(err=>console.log(err))
         })
+        const dataPriceTotal = {total_price:totalPrice}
+        Axios.post(BASE_URL+'/order',dataPriceTotal)
+        .then(res=>{
+
+        }).catch(err=>console.log(err))
     }
 
     const closeCheckOut = ()=>{
@@ -211,29 +222,111 @@ const Home = () => {
         Axios.post(BASE_URL+'/income/day', date)
         .then(res=>{
             setIncomeDay(rupiah(res.data[0].total.toString()))
+            // console.log(res.data[0].total)
         })
         .catch(err=>console.log(err))
     }
-    const getOrderInday = ()=>{
+
+    const getIncomIndayPersen = ()=>{
         let date_ob = new Date();
         let date_day = date_ob.getFullYear() + "-" + ("0" + (date_ob.getMonth() + 1)).slice(-2) + "-" + ("0" + date_ob.getDate()).slice(-2)
+        let dates = {
+            date:date_day
+        }
 
         function getLastWeek() {
             var today = new Date();
-            var lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+            var lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
             return lastWeek;
           }
         let lastWeeks = getLastWeek();
         let lastweekDisplay = lastWeeks.getFullYear().toString() +'-'+ ("0" + (lastWeeks.getMonth() + 1)).slice(-2) +'-'+ ("0" + lastWeeks.getDate()).slice(-2)
+
+        let date = {
+            date: lastweekDisplay
+        }
+
+        Axios.post(BASE_URL+'/income/day', date)
+        .then(resAwal=>{
+            if(resAwal.data[0].total !== null){
+                Axios.post(BASE_URL+'/income/day', dates)
+                .then(resAkhir=>{
+                    // setAkhir(res.data[0].total)
+                    const dataAkhirs = resAkhir.data[0].total
+                    const dataAwals = resAwal.data[0].total
+                    setAwal(dataAwals);
+                    setAkhir(dataAkhirs)
+                    // console.log(dataAkhirs)
+                    if(dataAkhirs > dataAwals){
+                        let persen = (dataAkhirs - dataAwals) / dataAwals * 100
+                        setPersenDay(Math.floor(persen))
+                    }else{
+                        let persen = (dataAwals - dataAkhirs) / dataAwals * 100
+                        setPersenDay(Math.floor(persen))
+                    }
+                })
+                .catch(err=>console.log(err))
+            }
+        })
+        .catch(err=>console.log(err))
+    }
+
+
+    const getOrderInday = ()=>{
+        // hari ini
+        let date_ob = new Date();
+        let date_day = date_ob.getFullYear() + "-" + ("0" + (date_ob.getMonth() + 1)).slice(-2) + "-" + ("0" + date_ob.getDate()).slice(-2)
+
+        // 1 minggu lalu
+        function getLastWeek() {
+            let today = new Date();
+            let lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+            return lastWeek;
+          }
+        let lastWeeks = getLastWeek();
+        let lastweekDisplay = lastWeeks.getFullYear().toString() +'-'+ ("0" + (lastWeeks.getMonth() + 1)).slice(-2) +'-'+ ("0" + lastWeeks.getDate()).slice(-2)
+
+        // dua minggu lalu
+        function getLastWeeks() {
+            let today = new Date();
+            let lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 14);
+            return lastWeek;
+          }
+        let lastWeekss = getLastWeeks();
+        let lastweekDisplays = lastWeekss.getFullYear().toString() +'-'+ ("0" + (lastWeekss.getMonth() + 1)).slice(-2) +'-'+ ("0" + lastWeekss.getDate()).slice(-2)
+        
+        // data akhir
         let date = {
             lastweek: lastweekDisplay,
             newdate:date_day
         }
-        // console.log(date);
+
+        // data awal
+        let dateAkhirs = {
+            lastweek: lastweekDisplays,
+            newdate:lastweekDisplay
+        }
         Axios.post(BASE_URL+'/orders/total', date)
-        .then(res=>{
+        .then(resAkhir=>{
             // console.log(res);
-            setOrderTotal(rupiah(res.data[0].orders.toString()))
+            setOrderTotal(rupiah(resAkhir.data[0].orders.toString()))
+            Axios.post(BASE_URL+'/orders/total', dateAkhirs)
+            .then(resAwal=>{
+                const dataAkhir = resAkhir.data[0].orders
+                const dataAwal = resAwal.data[0].orders
+                // console.log(dataAkhir);
+                setOrderAwal(dataAwal);
+                setOrderAkhir(dataAkhir)
+                    // console.log(dataAkhirs)
+                if(dataAkhir > dataAwal){
+                    let persen = (dataAkhir - dataAwal) / dataAwal * 100
+                    setPersenLastWeek(Math.floor(persen))
+                }else{
+                    let persen = (dataAwal - dataAkhir) / dataAwal * 100
+                    setPersenLastWeek(Math.floor(persen))
+                }
+            })
+            .catch(err=>console.log(err))
         })
         .catch(err=>console.log(err))
     }
@@ -250,6 +343,7 @@ const Home = () => {
         })
         .catch(err=>console.log(err))
     }
+    
 
     useEffect(()=>{totals()})
 
@@ -259,6 +353,7 @@ const Home = () => {
         getIncomInday()
         getOrderInday()
         getIncomInYear()
+        getIncomIndayPersen()
     }, [])
     class ComponentToPrint extends React.Component {
         render() {
@@ -405,14 +500,19 @@ const Home = () => {
                             <div className="content-card">
                                 <p>Today’s Income</p>
                                 <h4>Rp. {dataIncomeDay}</h4>
-                                <p>+2% Yesterday</p>
+                                {
+                                    dataAwal < dataAkhir ? <p>+{dataPersenDay}% Yesterday</p> : dataAwal > dataAkhir ? <p>-{dataPersenDay}% Yesterday</p> : <p>0% Yesterday</p>
+                                }
+                                
                             </div>
                         </div>
                         <div className="box-mon">
                             <div className="content-card">
                                 <p>Orders</p>
                                 <h4>{dataOrderTotal}</h4>
-                                <p>+5% Last Week</p>
+                                {
+                                    dataOrderAwal < dataOrderAkhir ? <p>+{dataPersenLstWeek}% Last Week</p> : dataOrderAwal > dataOrderAkhir ? <p>-{dataPersenLstWeek}% Last Week</p> : <p>0% Last Week</p>
+                                }
                             </div>
                         </div>
                         <div className="box-year">
