@@ -97,7 +97,9 @@ const Home = () => {
     const deleteCarts = ()=>{
         dispatch(deleteCart(dataIdCart))
         handleClose()
-        history.push('/')
+        setTimeout(()=>{
+            history.push('/')
+        }, 1600)
     }
 
     const handleCancel = async()=>{
@@ -167,7 +169,9 @@ const Home = () => {
                     showConfirmButton: false,
                     timer: 1500
                 })
-                history.push('/')
+                setTimeout(()=>{
+                    history.push('/')
+                }, 1600)
             }).catch(err=>console.log(err))
         }else{
             Swal.fire({
@@ -232,7 +236,9 @@ const Home = () => {
                     showConfirmButton: false,
                     timer: 1500
                 })
-                history.push('/')
+                setTimeout(()=>{
+                    history.push('/')
+                }, 1600)
             }).catch(err=>console.log(err))
         }else{
             Swal.fire({
@@ -451,7 +457,9 @@ const Home = () => {
                 timer: 1500
             })
             handleCloseDeleteProduct();
-            history.push('/');
+            setTimeout(()=>{
+                history.push('/')
+            }, 1600)
         }).catch(err=>console.log(err))
     }
 
