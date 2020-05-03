@@ -716,6 +716,11 @@ border-radius: 10px;
     padding-left: 30px;
 }
 
+.lable-chart{
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
 .chart{
     /* Rectangle 10 */
 
@@ -729,6 +734,26 @@ background: #FFFFFF;
 box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.25);
 border-radius: 10px;
 
+}
+
+.Delete-Card{
+    width: 50px;
+    position: absolute;
+    margin-left: 190px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    opacity: .2;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.Delete-Card:hover{
+    opacity: 1;
+    background-color: rgba(228, 228, 228, 0.829);
+}
+
+.Delete-Card:active{
+    background-color: rgba(247, 247, 247, 0.829);
 }
 
 

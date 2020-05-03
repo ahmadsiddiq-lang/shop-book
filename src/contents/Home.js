@@ -8,12 +8,13 @@ import {getProduct, insertCart, getCart, deleteCart, searchData} from '../redux/
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
 import {useHistory} from 'react-router-dom';
+import { Line } from 'react-chartjs-2';
 require('dotenv').config()
 
 const Home = () => {
     const BASE_URL = 'http://192.168.1.12:4000';
     const [height, setHeight] = useState(window.innerHeight - 80)
-    const [showContent, setShowContent] = useState(false)
+    const [showContent, setShowContent] = useState(true)
     const [transInput, setTrans] = useState(false)
     const [sidBarBox, setBar] = useState(false)
     const [modal, setModals] = useState(true)
@@ -23,6 +24,7 @@ const Home = () => {
     const [totalPrice, setTotal] = useState(0);
     const [product, setProduct] = useState('')
     const [dataIdCart, setIdCart] = useState({})
+    const [dataIdProduct, setIdProduct] = useState({})
     const [dataSearch, setDataSearch] = useState('')
     const [dataIncomeDay, setIncomeDay] = useState('')
     const [dataIncomeYear, setIncomeYear] = useState('')
@@ -54,6 +56,11 @@ const Home = () => {
     const handleShow = (id_cart) => {
         setIdCart(id_cart)
         setShow(true);}
+    const [showDeleteProduct, setShowDeleteProduct] = useState(false);
+    const handleCloseDeleteProduct = () => setShowDeleteProduct(false);
+    const handleShowDeleteProduct = (id_cart) => {
+        setIdProduct(id_cart)
+        setShowDeleteProduct(true);}
 
     const getAllCart = async () => {
         Axios.get(BASE_URL+"/getcart").then(resolve => {
@@ -181,6 +188,7 @@ const Home = () => {
             Axios.post(BASE_URL+'/insert', data)
             .then(res=>{
                 alert('Success...!')
+                history.push('/')
             }).catch(err=>console.log(err))
         }else{
             alert('Form empty')
@@ -321,11 +329,11 @@ const Home = () => {
             .then(resAwal=>{
                 const dataAkhir = resAkhir.data[0].orders
                 const dataAwal = resAwal.data[0].orders
-                // console.log(dataAkhir);
                 setOrderAwal(dataAwal);
                 setOrderAkhir(dataAkhir)
-                    // console.log(dataAkhirs)
-                if(dataAkhir > dataAwal){
+                if(dataAwal === 0){
+                    setPersenLastWeek(0)
+                }else if(dataAkhir > dataAwal){
                     let persen = (dataAkhir - dataAwal) / dataAwal * 100
                     setPersenLastWeek(Math.floor(persen))
                 }else{
@@ -377,6 +385,33 @@ const Home = () => {
         })
         .catch(err=>console.log(err))
     }
+
+    const deleteProduct = () =>{
+        Axios.delete(BASE_URL+`/delete/${dataIdProduct}`)
+        .then(res=>{
+            alert('Delete Success !');
+            handleCloseDeleteProduct();
+            history.push('/');
+        }).catch(err=>console.log(err))
+    }
+
+    const dataChart = {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [
+            {
+                label: "This Month",
+                // backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: [0, 10, 5, 2, 20, 30, 45],
+            },
+            {   
+                label: "Last Month",
+                // backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(43, 43, 238)',
+                data: [0, 10, 2, 10, 10, 20, 35],
+            }
+        ]
+    }
     
 
     useEffect(()=>{totals()})
@@ -389,6 +424,7 @@ const Home = () => {
         getIncomInYear()
         getIncomIndayPersen()
     }, [])
+    
     class ComponentToPrint extends React.Component {
         render() {
           return (
@@ -516,6 +552,7 @@ const Home = () => {
                    (dataProduct.length > 0 ? (dataProduct.map(post=>{
                         return(
                             <div key={post.id_product} className="listContent">
+                                <div onClick={()=> handleShowDeleteProduct(post.id_product)} className="Delete-Card">X</div>
                                 <div id={post.id_product} className={'slideBack'}>
                                     <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
                                 </div>
@@ -533,7 +570,7 @@ const Home = () => {
                         <div className="box-day">
                             <div className="content-card">
                                 <p>Today’s Income</p>
-                                <h4>Rp. {dataIncomeDay}</h4>
+                                <h4>Rp. {dataIncomeDay ? dataIncomeDay : 0}</h4>
                                 {
                                     dataAwal < dataAkhir ? <p>+{dataPersenDay}% Yesterday</p> : dataAwal > dataAkhir ? <p>-{dataPersenDay}% Yesterday</p> : <p>0% Yesterday</p>
                                 }
@@ -543,7 +580,7 @@ const Home = () => {
                         <div className="box-mon">
                             <div className="content-card">
                                 <p>Orders</p>
-                                <h4>{dataOrderTotal}</h4>
+                                <h4>{dataOrderTotal ? dataOrderTotal : 0}</h4>
                                 {
                                     dataOrderAwal < dataOrderAkhir ? <p>+{dataPersenLstWeek}% Last Week</p> : dataOrderAwal > dataOrderAkhir ? <p>-{dataPersenLstWeek}% Last Week</p> : <p>0% Last Week</p>
                                 }
@@ -552,14 +589,20 @@ const Home = () => {
                         <div className="box-year">
                             <div className="content-card">
                                 <p>This Year’s Income</p>
-                                <h4>Rp. {dataIncomeYear}</h4>
+                                <h4>Rp. {dataIncomeYear ? dataIncomeYear : 0}</h4>
                                 {
                                     dataYearAwal < dataYearAkhir ? <p>+{dataPersenYear}% Last Year</p> : dataYearAwal > dataYearAkhir ? <p>-{dataPersenYear}% Last Year</p> : <p>0% Last Year</p>
                                 }
                             </div>
                         </div>
                         <div className="chart">
-                            <h4>Revenue</h4>
+                            <h4 className="lable-chart">Revenue</h4>
+                            < Line
+                                data={dataChart}
+                                options={{}}
+                                height={222}
+                                width={700}
+                            />
                         </div>
                     </>
                 )
@@ -624,6 +667,22 @@ const Home = () => {
                     Cencel
                 </Button>
                 <Button variant="primary" onClick={()=>deleteCarts()}>
+                    Ok
+                </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* modal delete Prodcut */}
+            <Modal show={showDeleteProduct} onHide={handleCloseDeleteProduct}>
+                <Modal.Header closeButton>
+                <Modal.Title>DELETE</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete this ?</Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseDeleteProduct}>
+                    Cencel
+                </Button>
+                <Button variant="primary" onClick={()=>deleteProduct()}>
                     Ok
                 </Button>
                 </Modal.Footer>
