@@ -80,7 +80,7 @@ const reducer = (state = initialValue, action) => {
             ...state,
             isPending: false,
             isFulfilled: true,
-            dataCart: action.payload.data
+            // dataCart: action.payload.data
             };
         case "SEARCH_PRODUCT_PENDING":
             return {

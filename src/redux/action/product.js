@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import Swal from 'sweetalert2';
 const BASE_URL = 'http://192.168.1.12:4000';
 
 export const getProduct = ()=>{
@@ -24,7 +25,15 @@ export const getCart = (data)=>{
 export const deleteCart =(id_cart)=>{
     return{
         type: "DELETE_CART",
-        payload: Axios.delete(BASE_URL+`/deletecart/${id_cart}`)
+        payload: Axios.delete(BASE_URL+`/deletecart/${id_cart}`).then(res=>{
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Delete Success !',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        })
     }
 };
 export const searchData =(data)=>{

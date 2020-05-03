@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Modal, Form } from 'react-bootstrap';
 import {useHistory} from 'react-router-dom';
 import { Line } from 'react-chartjs-2';
+import Swal from 'sweetalert2';
 require('dotenv').config()
 
 const Home = () => {
@@ -137,7 +138,10 @@ const Home = () => {
                     document.getElementById(post.id_product).setAttribute('style','display:block');
                     dispatch(insertCart(post))
                 }else{
-                    alert('data sudah ada')
+                    Swal.fire({
+                        icon: 'info',
+                        text: 'Data already exists',
+                    })
                 }
             }else{
                 dispatch(insertCart(post))
@@ -156,11 +160,20 @@ const Home = () => {
         if(data.stock.length > 0){
             Axios.patch(BASE_URL+'/update/product',data)
             .then(res=>{
-                alert('Update Success !')
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Delete Success !',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 history.push('/')
             }).catch(err=>console.log(err))
         }else{
-            alert('Data Empty')
+            Swal.fire({
+                icon: 'info',
+                text: 'Please enter stock',
+              })
         }
     }
 
@@ -171,7 +184,10 @@ const Home = () => {
             const datax = {...cart,[data.id_product]:[data.price] * (qty[data.id_product]+1)}
             setCart(datax)
         }else{
-            alert('Stock tidak cukup')
+            Swal.fire({
+                icon: 'info',
+                text: 'insufficient stock !',
+              })
         }
     }
     const qtyCountMinus = (data)=>{
@@ -198,8 +214,7 @@ const Home = () => {
     }
 
     const inputProduct =()=>{
-        // console.log(product)
-        if(product.product_name.length > 0 && product.description.length > 0 && product.category.length > 0 && product.price.length > 0 && product.stock.length > 0){
+        if(product.product_name && product.description && product.category && product.price && product.stock && product.image){
             const data = new FormData();
             data.append('image', product.image)
             data.set('product_name', product.product_name)
@@ -210,11 +225,20 @@ const Home = () => {
     
             Axios.post(BASE_URL+'/insert', data)
             .then(res=>{
-                alert('Success...!')
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Insert Success !',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 history.push('/')
             }).catch(err=>console.log(err))
         }else{
-            alert('Form empty')
+            Swal.fire({
+                icon: 'info',
+                text: 'Please enter data',
+            })
         }
     }   
 
@@ -228,6 +252,13 @@ const Home = () => {
             Axios.patch(BASE_URL+'/update/stock',input)
             .then(res=>{
                 // console.log(res)
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Update Success !',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 handleCloseCheckout()
             }).catch(err=>console.log(err))
         })
@@ -412,7 +443,13 @@ const Home = () => {
     const deleteProduct = () =>{
         Axios.delete(BASE_URL+`/delete/${dataIdProduct}`)
         .then(res=>{
-            alert('Delete Success !');
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Delete Success !',
+                showConfirmButton: false,
+                timer: 1500
+            })
             handleCloseDeleteProduct();
             history.push('/');
         }).catch(err=>console.log(err))
