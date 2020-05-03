@@ -6,7 +6,7 @@ import Axios from 'axios';
 import ReactToPrint from 'react-to-print';
 import {getProduct, insertCart, getCart, deleteCart, searchData} from '../redux/action/product';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Form } from 'react-bootstrap';
 import {useHistory} from 'react-router-dom';
 import { Line } from 'react-chartjs-2';
 require('dotenv').config()
@@ -38,6 +38,8 @@ const Home = () => {
     const [dataOrderAkhir, setOrderAkhir] = useState('')
     const [dataYearAwal, setYearAwal] = useState('')
     const [dataYearAkhir, setYearAkhir] = useState('')
+    const [updateStock, setUpdateStock] = useState('')
+    const [inputStock, setInputStock] = useState('')
     const componentRef = useRef();
     const history = useHistory();
     const resize = () => {
@@ -50,6 +52,12 @@ const Home = () => {
     const [showCheckout, setShowCheckout] = useState(false);
     const handleCloseCheckout = () => setShowCheckout(false);
     const handleShowCheckout = () => setShowCheckout(true);
+
+    const [showUpdateStock, setShowUpdateStock] = useState(false);
+    const handleCloseModalStock = () => setShowUpdateStock(false);
+    const handleShowModalStock = (data) => {
+        setUpdateStock(data)
+        setShowUpdateStock(true)};
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -136,8 +144,23 @@ const Home = () => {
                 document.getElementById(post.id_product).setAttribute('style','display:block');
                 setQty({...qty, [post.id_product]: 1}) 
             }
+        }
+    }
+
+    const handleUpdateStock = ()=>{
+        const data = {
+            id_product: updateStock.id_product,
+            stock: inputStock
+        }
+        // console.log(data)
+        if(data.stock.length > 0){
+            Axios.patch(BASE_URL+'/update/product',data)
+            .then(res=>{
+                alert('Update Success !')
+                history.push('/')
+            }).catch(err=>console.log(err))
         }else{
-            alert('Stock Habis')
+            alert('Data Empty')
         }
     }
 
@@ -556,6 +579,10 @@ const Home = () => {
                                 <div id={post.id_product} className={'slideBack'}>
                                     <img className="tick" src={require('../asset/img/tick.png')} alt=""/>
                                 </div>
+                                <div onClick={()=>handleShowModalStock(post)} className={post.stock === 0 ?"out-of-stock stock-active" : "out-of-stock"}>
+                                    <h3>Out Of Stock</h3>
+                                    <p className="update-stock">Update</p>
+                                </div>
                                 <img onClick={()=> tickActive(post)} className="imgContent" src={post.image} alt=""/>
                                 <p className="titleImg">{post.product_name}</p>
                                 <p className="price">Rp. {rupiah(post.price)}</p>
@@ -700,6 +727,24 @@ const Home = () => {
                 </Button>
                 <Button variant="primary" onClick={()=> checkout()}>
                     Ok
+                </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* modal update stock */}
+            <Modal show={showUpdateStock} onHide={handleCloseModalStock}>
+                <Modal.Header closeButton>
+                <Modal.Title>Update Stock</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Control onChange={(e)=>setInputStock(e.target.value)} type="number" placeholder="Enter stock" />
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseModalStock}>
+                    Cencel
+                </Button>
+                <Button variant="primary" onClick={handleUpdateStock}>
+                    Update
                 </Button>
                 </Modal.Footer>
             </Modal>

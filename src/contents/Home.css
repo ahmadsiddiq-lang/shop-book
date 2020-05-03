@@ -756,6 +756,32 @@ border-radius: 10px;
     background-color: rgba(247, 247, 247, 0.829);
 }
 
+.out-of-stock{
+    border: 2px solid;
+    position: absolute;
+    margin-top: 100px;
+    width: 240px;
+    color: rgb(240, 27, 27);
+    font-weight: bold;
+    background-color: rgba(216, 216, 216, 0.603);
+    cursor: pointer;
+    display: none;
+}
+
+.out-of-stock:active{
+    background-color: rgba(190, 190, 190, 0.603);
+}
+
+.update-stock{
+    margin-top: -10px;
+    margin-bottom: 0px;
+    font-size: 15px;
+}
+
+.stock-active{
+    display: block;
+}
+
 
 
 
