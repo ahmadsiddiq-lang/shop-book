@@ -41,3 +41,27 @@
     right: 0;
     width: 100px;
 }
+
+.warning{
+    font-size: 15px;
+    font-style: italic;
+    color: red;
+    display: none;
+    margin-bottom: 0px;
+}
+
+.warning-active{
+    display: inline-block;
+}
+
+.wrong{
+    border-color: red;
+}
+
+.to-dashboard{
+    font-style: italic;
+    margin-top: 35px;
+    font-size: 15px;
+    color: #57CAD5;
+    cursor: pointer;
+}

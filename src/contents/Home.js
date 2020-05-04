@@ -16,6 +16,7 @@ const Home = () => {
     const BASE_URL = 'http://192.168.1.12:4000';
     const [height, setHeight] = useState(window.innerHeight - 80)
     const [showContent, setShowContent] = useState(true)
+    const [verifyLogin, setVerifyLogin] = useState(false)
     const [transInput, setTrans] = useState(false)
     const [sidBarBox, setBar] = useState(false)
     const [modal, setModals] = useState(true)
@@ -97,18 +98,32 @@ const Home = () => {
     }
 
     const deleteCarts = ()=>{
-        dispatch(deleteCart(dataIdCart))
-        handleClose()
-        setTimeout(()=>{
-            history.push('/')
-        }, 1600)
+        if(verifyLogin === true){
+            dispatch(deleteCart(dataIdCart))
+            handleClose()
+            setTimeout(()=>{
+                history.push('/login')
+            }, 1600)
+        }else{
+            Swal.fire({
+                icon: 'info',
+                text: 'You are not logged in',
+            })
+        }
     }
 
     const handleCancel = async()=>{
-        Axios.delete(BASE_URL+('/deleteall/cart'))
-        .then(res=>{
-            history.push('/')
-        }).catch(err=>console.log(err))
+        if(verifyLogin === true){
+            Axios.delete(BASE_URL+('/deleteall/cart'))
+            .then(res=>{
+                history.push('/login')
+            }).catch(err=>console.log(err))
+        }else{
+            Swal.fire({
+                icon: 'info',
+                text: 'You are not logged in',
+            })
+        }
     }
 
     const getAllProduct = async ()=>{
@@ -129,57 +144,71 @@ const Home = () => {
     }
 
     const tickActive = (post)=>{
-        if(post.stock > 0){
-            if(dataCart.length > 0){
-                let status = false
-                dataCart.forEach(data=>{
-                    if(data.id_product === post.id_product){
-                        status = true
-                    }
-                })
-                if(status === false){
-                    setQty({...qty, [post.id_product]: 1}) 
-                    document.getElementById(post.id_product).setAttribute('style','display:block');
-                    dispatch(insertCart(post))
-                }else{
-                    Swal.fire({
-                        icon: 'info',
-                        text: 'Data already exists',
+        if(verifyLogin === true){
+            if(post.stock > 0){
+                if(dataCart.length > 0){
+                    let status = false
+                    dataCart.forEach(data=>{
+                        if(data.id_product === post.id_product){
+                            status = true
+                        }
                     })
+                    if(status === false){
+                        setQty({...qty, [post.id_product]: 1}) 
+                        document.getElementById(post.id_product).setAttribute('style','display:block');
+                        dispatch(insertCart(post))
+                    }else{
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'Data already exists',
+                        })
+                    }
+                }else{
+                    dispatch(insertCart(post))
+                    document.getElementById(post.id_product).setAttribute('style','display:block');
+                    setQty({...qty, [post.id_product]: 1}) 
                 }
-            }else{
-                dispatch(insertCart(post))
-                document.getElementById(post.id_product).setAttribute('style','display:block');
-                setQty({...qty, [post.id_product]: 1}) 
             }
+        }else{
+            Swal.fire({
+                icon: 'info',
+                text: 'You are not logged in',
+            })
         }
     }
 
     const handleUpdateStock = ()=>{
-        const data = {
-            id_product: updateStock.id_product,
-            stock: inputStock
-        }
-        // console.log(data)
-        if(data.stock.length > 0){
-            Axios.patch(BASE_URL+'/update/product',data)
-            .then(res=>{
+        if(verifyLogin === true){
+            const data = {
+                id_product: updateStock.id_product,
+                stock: inputStock
+            }
+            // console.log(data)
+            if(data.stock.length > 0){
+                Axios.patch(BASE_URL+'/update/product',data)
+                .then(res=>{
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Delete Success !',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setTimeout(()=>{
+                        history.push('/login')
+                    }, 1600)
+                }).catch(err=>console.log(err))
+            }else{
                 Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Delete Success !',
-                    showConfirmButton: false,
-                    timer: 1500
+                    icon: 'info',
+                    text: 'Please enter stock',
                 })
-                setTimeout(()=>{
-                    history.push('/')
-                }, 1600)
-            }).catch(err=>console.log(err))
+            }
         }else{
             Swal.fire({
                 icon: 'info',
-                text: 'Please enter stock',
-              })
+                text: 'You are not logged in',
+            })
         }
     }
 
@@ -193,7 +222,7 @@ const Home = () => {
             Swal.fire({
                 icon: 'info',
                 text: 'insufficient stock !',
-              })
+            })
         }
     }
     const qtyCountMinus = (data)=>{
@@ -220,61 +249,75 @@ const Home = () => {
     }
 
     const inputProduct =()=>{
-        if(product.product_name && product.description && product.category && product.price && product.stock && product.image){
-            const data = new FormData();
-            data.append('image', product.image)
-            data.set('product_name', product.product_name)
-            data.set('description', product.description)
-            data.set('category', product.category)
-            data.set('price', product.price)
-            data.set('stock', product.stock)
-    
-            Axios.post(BASE_URL+'/insert', data)
-            .then(res=>{
+        if(verifyLogin === true){
+            if(product.product_name && product.description && product.category && product.price && product.stock && product.image){
+                const data = new FormData();
+                data.append('image', product.image)
+                data.set('product_name', product.product_name)
+                data.set('description', product.description)
+                data.set('category', product.category)
+                data.set('price', product.price)
+                data.set('stock', product.stock)
+        
+                Axios.post(BASE_URL+'/insert', data)
+                .then(res=>{
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Insert Success !',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setTimeout(()=>{
+                        getAllProduct()
+                    }, 1600)
+                }).catch(err=>console.log(err))
+            }else{
                 Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Insert Success !',
-                    showConfirmButton: false,
-                    timer: 1500
+                    icon: 'info',
+                    text: 'Please enter data',
                 })
-                setTimeout(()=>{
-                    getAllProduct()
-                }, 1600)
-            }).catch(err=>console.log(err))
+            }
         }else{
             Swal.fire({
                 icon: 'info',
-                text: 'Please enter data',
+                text: 'You are not logged in',
             })
         }
     }   
 
     const checkout =()=>{
-        setModalsCheckout(modalCheckout ? false : true)
-        dataCart.forEach(data=>{
-            const input = {
-                id_product: data.id_product,
-                qty: qty[data.id_product]
-            }
-            Axios.patch(BASE_URL+'/update/stock',input)
+        if(verifyLogin === true){
+            setModalsCheckout(modalCheckout ? false : true)
+            dataCart.forEach(data=>{
+                const input = {
+                    id_product: data.id_product,
+                    qty: qty[data.id_product]
+                }
+                Axios.patch(BASE_URL+'/update/stock',input)
+                .then(res=>{
+                    // console.log(res)
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Update Success !',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    handleCloseCheckout()
+                }).catch(err=>console.log(err))
+            })
+            const dataPriceTotal = {total_price:totalPrice}
+            Axios.post(BASE_URL+'/order',dataPriceTotal)
             .then(res=>{
-                // console.log(res)
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Update Success !',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                handleCloseCheckout()
-            }).catch(err=>console.log(err))
-        })
-        const dataPriceTotal = {total_price:totalPrice}
-        Axios.post(BASE_URL+'/order',dataPriceTotal)
-        .then(res=>{
 
-        }).catch(err=>console.log(err))
+            }).catch(err=>console.log(err))
+        }else{
+            Swal.fire({
+                icon: 'info',
+                text: 'You are not logged in',
+            })
+        }
     }
 
     const closeCheckOut = ()=>{
@@ -449,40 +492,62 @@ const Home = () => {
     }
 
     const deleteProduct = () =>{
-        Axios.delete(BASE_URL+`/delete/${dataIdProduct}`)
-        .then(res=>{
+        if(verifyLogin === true){
+            Axios.delete(BASE_URL+`/delete/${dataIdProduct}`)
+            .then(res=>{
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Delete Success !',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                handleCloseDeleteProduct();
+                setTimeout(()=>{
+                    getAllProduct()
+                }, 1600)
+            }).catch(err=>console.log(err))
+        }else{
             Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Delete Success !',
-                showConfirmButton: false,
-                timer: 1500
+                icon: 'info',
+                text: 'You are not logged in',
             })
-            handleCloseDeleteProduct();
-            setTimeout(()=>{
-                getAllProduct()
-            }, 1600)
-        }).catch(err=>console.log(err))
+        }
     }
 
     const handleLogout = ()=>{
-        Swal.fire({
-            title: 'Logout',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#57CAD5',
-            cancelButtonColor: '#F24F8A',
-            confirmButtonText: 'Logout'
-          }).then((result) => {
-            if (result.value) {
-                Axios.get(BASE_URL+'/logout',{
-                    withCredentials: true,
-                  })
-                .then(res=>{
-                    history.replace('/')
-                }).catch(err=>console.log(err))
-            }
-          })
+        if(verifyLogin === true){
+            Swal.fire({
+                title: 'Logout',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#57CAD5',
+                cancelButtonColor: '#F24F8A',
+                confirmButtonText: 'Logout'
+            }).then((result) => {
+                if (result.value) {
+                    Axios.get(BASE_URL+'/logout',{
+                        withCredentials: true,
+                    })
+                    .then(res=>{
+                        history.replace('/login')
+                    }).catch(err=>console.log(err))
+                }
+            })
+        }else{
+            Swal.fire({
+                title: 'Login',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#57CAD5',
+                cancelButtonColor: '#F24F8A',
+                confirmButtonText: 'Login'
+            }).then((result) => {
+                if (result.value) {
+                    history.push('/login')
+                }
+            })
+        }
     }
 
     const dataChart = {
@@ -519,9 +584,11 @@ const Home = () => {
         Axios.get('http://192.168.1.12:4000/verify',{
           withCredentials: true,
         }).then(res=>{
-          // console.log(res)
-          if(!res.data[0]){
-            history.push('/')
+            if(res.data.messege === "token infalid"){
+                console.log('logout')
+                // history.push('/')
+            }else{
+                setVerifyLogin(true)
           }
         }).catch(err=>{console.log(err)})
     },[history])
@@ -605,7 +672,10 @@ const Home = () => {
                 </div>
                 <div onClick={()=>handleLogout()} className="boxIcon">
                     <img className="iconBarBox" src={require('../asset/img/login.png')} alt="Logout"/>
-                    <h5 className="titleIcon">Login</h5>
+                    {
+                        verifyLogin ? <h5 className="titleIcon">Logout</h5> : <h5 className="titleIcon">Login</h5>
+                    }
+                    
                 </div>
             </div>
             {
@@ -669,6 +739,7 @@ const Home = () => {
                                 <img onClick={()=> tickActive(post)} className="imgContent" src={post.image} alt=""/>
                                 <p className="titleImg">{post.product_name}</p>
                                 <p className="price">Rp. {rupiah(post.price)}</p>
+                                <p className="stock">{post.stock} stock</p>
                             </div> 
                         )
                     })): 
