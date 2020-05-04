@@ -9,11 +9,12 @@ import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux';
 import store from '../src/redux/store';
 const Data = () => {
+
   return(
     <Provider store={store}>
       <Router>
-        <Route path='/' exact component={Login} />
-        <Route path='/Home' exact component={Home} />
+        <Route path='/' exact component={Home} />
+        <Route path='/login' exact component={Login} />
       </Router>
     </Provider>
   )

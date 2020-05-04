@@ -149,6 +149,7 @@
 }
 
 .listContent{
+    position: relative;
     float: left;
     margin-left: 55px;
     margin-top: 15px;
@@ -162,6 +163,13 @@
     background: #FFFFFF;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
 
+}
+
+.stock{
+    position: absolute;
+    bottom: -10px;
+    font-size: 10px;
+    right: 8px;
 }
 
 .slideBack{
@@ -473,7 +481,7 @@
     z-index: 999;
     margin: auto;
     text-align: center;
-    margin-top: 5%;
+    margin-top: 2%;
     border-radius: 4px;
 }
 
@@ -658,6 +666,138 @@
 .close-modal-checkout:hover{
     color: black;
 }
+
+.box-empty{
+    margin: auto;
+    text-align: center;
+    margin-top: 20%;
+}
+
+
+.box-day{
+    /* Rectangle 9 */
+
+position: absolute;
+width: 272px;
+height: 135px;
+left: 110px;
+top: 100px;
+
+background: linear-gradient(285.38deg, #FBB2B4 30.05%, rgba(255, 143, 178, 0) 133.19%);
+box-shadow: 10px 15px 10px rgba(255, 143, 178, 0.25);
+border-radius: 10px;
+
+}
+
+.box-mon{
+    /* Rectangle 9 */
+
+position: absolute;
+width: 272px;
+height: 135px;
+left: 415px;
+top: 100px;
+
+background: linear-gradient(285.38deg, #29DFFF 30.05%, rgba(41, 223, 255, 0) 133.19%);
+box-shadow: 10px 15px 10px rgba(41, 223, 255, 0.25);
+border-radius: 10px;
+
+}
+
+.box-year{
+    /* Rectangle 9 */
+
+position: absolute;
+width: 272px;
+height: 135px;
+left: 720px;
+top: 100px;
+
+background: linear-gradient(285.38deg, #AB84C8 30.05%, rgba(241, 201, 236, 0) 133.19%);
+box-shadow: 10px 15px 10px rgba(241, 201, 236, 0.25);
+border-radius: 10px;
+
+}
+
+.content-card{
+    padding: 10px;
+    padding-left: 30px;
+}
+
+.lable-chart{
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.chart{
+    /* Rectangle 10 */
+
+position: absolute;
+width: 64.5%;
+height: 322px;
+left: 110px;
+top: 252px;
+
+background: #FFFFFF;
+box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.25);
+border-radius: 10px;
+
+}
+
+.Delete-Card{
+    width: 50px;
+    position: absolute;
+    margin-left: 190px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    opacity: .2;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.Delete-Card:hover{
+    opacity: 1;
+    background-color: rgba(228, 228, 228, 0.829);
+}
+
+.Delete-Card:active{
+    background-color: rgba(247, 247, 247, 0.829);
+}
+
+.out-of-stock{
+    border: 2px solid;
+    position: absolute;
+    margin-top: 100px;
+    width: 240px;
+    color: rgb(240, 27, 27);
+    font-weight: bold;
+    background-color: rgba(216, 216, 216, 0.603);
+    cursor: pointer;
+    display: none;
+}
+
+.out-of-stock:active{
+    background-color: rgba(190, 190, 190, 0.603);
+}
+
+.update-stock{
+    margin-top: -10px;
+    margin-bottom: 0px;
+    font-size: 15px;
+}
+
+.stock-active{
+    display: block;
+}
+
+
+
+
+
+
+
+
+
 
 .cf:before,
 .cf:after {
