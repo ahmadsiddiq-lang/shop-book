@@ -5,7 +5,7 @@ import Axios from 'axios';
 import './Login.css'
 
 const Login =()=>{
-    const BASE_URL = 'http://192.168.1.12:4000';
+    const BASE_URL = 'http://54.204.68.167:4000';
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -109,7 +109,7 @@ const Login =()=>{
     }
 
     useEffect(()=>{
-        Axios.get('http://192.168.1.12:4000/verify',{
+        Axios.get('http://54.204.68.167:4000/verify',{
           withCredentials: true,
         }).then(res=>{
           // console.log(res)
