@@ -114,7 +114,9 @@ const Home = () => {
 
     const handleCancel = async()=>{
         if(verifyLogin === true){
-            Axios.delete(BASE_URL+('/deleteall/cart'))
+            Axios.delete(BASE_URL+('/deleteall/cart'),{
+                withCredentials: true,
+              })
             .then(res=>{
                 history.push('/login')
             }).catch(err=>console.log(err))
@@ -185,7 +187,9 @@ const Home = () => {
             }
             // console.log(data)
             if(data.stock.length > 0){
-                Axios.patch(BASE_URL+'/update/product',data)
+                Axios.patch(BASE_URL+'/update/product',data,{
+                    withCredentials: true,
+                  })
                 .then(res=>{
                     Swal.fire({
                         position: 'center',
@@ -259,7 +263,9 @@ const Home = () => {
                 data.set('price', product.price)
                 data.set('stock', product.stock)
         
-                Axios.post(BASE_URL+'/insert', data)
+                Axios.post(BASE_URL+'/insert', data,{
+                    withCredentials: true,
+                  })
                 .then(res=>{
                     Swal.fire({
                         position: 'center',
@@ -294,7 +300,9 @@ const Home = () => {
                     id_product: data.id_product,
                     qty: qty[data.id_product]
                 }
-                Axios.patch(BASE_URL+'/update/stock',input)
+                Axios.patch(BASE_URL+'/update/stock',input,{
+                    withCredentials: true,
+                  })
                 .then(res=>{
                     // console.log(res)
                     Swal.fire({
@@ -308,7 +316,9 @@ const Home = () => {
                 }).catch(err=>console.log(err))
             })
             const dataPriceTotal = {total_price:totalPrice}
-            Axios.post(BASE_URL+'/order',dataPriceTotal)
+            Axios.post(BASE_URL+'/order',dataPriceTotal,{
+                withCredentials: true,
+              })
             .then(res=>{
 
             }).catch(err=>console.log(err))
@@ -327,7 +337,7 @@ const Home = () => {
 
     const handleSearch = async(e)=>{
         if(e.key === 'Enter'){
-            console.log(dataSearch)
+            // console.log(dataSearch)
             dispatch(searchData(dataSearch))
         }
     }
@@ -493,7 +503,9 @@ const Home = () => {
 
     const deleteProduct = () =>{
         if(verifyLogin === true){
-            Axios.delete(BASE_URL+`/delete/${dataIdProduct}`)
+            Axios.delete(BASE_URL+`/delete/${dataIdProduct}`,{
+                withCredentials: true,
+              })
             .then(res=>{
                 Swal.fire({
                     position: 'center',
@@ -637,7 +649,7 @@ const Home = () => {
             <div className="header">
                 <img src={require('../asset/img/menu.png')} alt="" className="imgMenu" onClick={()=> setBar(sidBarBox ? false : true)} />
                 {
-                    showContent ? <h1 className="titleList title">List Items</h1> : <h1 className="titleList title">History</h1>
+                    showContent ? <h1 onClick={getAllProduct} style={{cursor:'pointer'}} className="titleList title">List Items</h1> : <h1 className="titleList title">History</h1>
                 }
                 <input onKeyDown={handleSearch} onChange={(e)=>setDataSearch(e.target.value)} type="text" placeholder="search" className={transInput ? 'inputSearch active' : 'inputSearch'} />
                 <img className="imgSearch" onClick={()=> setTrans(transInput ? false : true)} src={require('../asset/img/search.png')} alt=""/>
