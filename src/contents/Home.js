@@ -72,7 +72,9 @@ const Home = () => {
         setShowDeleteProduct(true);}
 
     const getAllCart = async () => {
-        Axios.get(BASE_URL+"/getcart").then(resolve => {
+        Axios.get(BASE_URL+"/getcart", {
+            withCredentials: true,
+        }).then(resolve => {
             dispatch(getCart(resolve))
             // for set qty
             if (resolve.data.length > 0) {
@@ -237,7 +239,7 @@ const Home = () => {
                     timer: 1500
                 })
                 setTimeout(()=>{
-                    history.push('/')
+                    getAllProduct()
                 }, 1600)
             }).catch(err=>console.log(err))
         }else{
@@ -458,9 +460,29 @@ const Home = () => {
             })
             handleCloseDeleteProduct();
             setTimeout(()=>{
-                history.push('/')
+                getAllProduct()
             }, 1600)
         }).catch(err=>console.log(err))
+    }
+
+    const handleLogout = ()=>{
+        Swal.fire({
+            title: 'Logout',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#57CAD5',
+            cancelButtonColor: '#F24F8A',
+            confirmButtonText: 'Logout'
+          }).then((result) => {
+            if (result.value) {
+                Axios.get(BASE_URL+'/logout',{
+                    withCredentials: true,
+                  })
+                .then(res=>{
+                    history.replace('/')
+                }).catch(err=>console.log(err))
+            }
+          })
     }
 
     const dataChart = {
@@ -492,6 +514,17 @@ const Home = () => {
         getIncomInYear()
         getIncomIndayPersen()
     }, [])
+
+    useEffect(()=>{
+        Axios.get('http://192.168.1.12:4000/verify',{
+          withCredentials: true,
+        }).then(res=>{
+          // console.log(res)
+          if(!res.data[0]){
+            history.push('/')
+          }
+        }).catch(err=>{console.log(err)})
+    },[history])
     
     class ComponentToPrint extends React.Component {
         render() {
@@ -550,6 +583,7 @@ const Home = () => {
                 <img onClick={()=>setShowContent(true)} className="iconBar" src={require('../asset/img/spoon.png')} alt=""/>
                 <img onClick={()=>setShowContent(false)} className="iconBar" src={require('../asset/img/catalog.png')} alt=""/>
                 <img onClick={()=> setModals(modal ? false : true)} className="iconBar" src={require('../asset/img/add.png')} alt=""/>
+                <img onClick={()=> handleLogout()} className="iconBar" src={require('../asset/img/login.png')} alt="Log Out"/>
             </div>
                 <div onClick={()=> setBar(sidBarBox ? false : true)} className={sidBarBox ? 'backSide' : 'backSide slide'}></div>
             <div className={sidBarBox ? 'sidebarBox activeBar' : 'sidebarBox'}>
@@ -568,6 +602,10 @@ const Home = () => {
                 <div onClick={()=> setModals(modal ? false : true)} className="boxIcon">
                     <img className="iconBarBox" src={require('../asset/img/add.png')} alt=""/>
                     <h5 className="titleIcon">Add</h5>
+                </div>
+                <div onClick={()=>handleLogout()} className="boxIcon">
+                    <img className="iconBarBox" src={require('../asset/img/login.png')} alt="Logout"/>
+                    <h5 className="titleIcon">Login</h5>
                 </div>
             </div>
             {

@@ -5,7 +5,9 @@ const BASE_URL = 'http://192.168.1.12:4000';
 export const getProduct = ()=>{
     return{
         type: "GET_PRODUCT",
-        payload: Axios.get(BASE_URL)
+        payload: Axios.get(BASE_URL,{
+            withCredentials: true,
+        })
     };
 };
 

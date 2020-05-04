@@ -9,6 +9,7 @@ import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux';
 import store from '../src/redux/store';
 const Data = () => {
+
   return(
     <Provider store={store}>
       <Router>

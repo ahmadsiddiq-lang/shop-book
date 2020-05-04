@@ -1,0 +1,43 @@
+.Login-Conten{
+    /* border: 2px solid; */
+    position: relative;
+    /* right: 0; */
+    margin: auto;
+    width: 60%;
+    height: 100%;
+    background-color: black;
+}
+
+.login-box-form{
+    border: 1px solid rgba(102, 102, 102, 0.432);
+    position: absolute;
+    right: 0;
+    width: 60%;
+    height: 100%;
+    background-color: white;
+}
+.box-text{
+    /* border: 2px solid; */
+    position: absolute;
+    top: 22%;
+    width: 30%;
+    left: 5%;
+    text-align: left;
+    color: white;
+}
+
+.form-input{
+    position: relative;
+    margin: auto;
+    margin-top: 30%;
+    /* border: 2px solid; */
+    /* border-radius: 5px; */
+    width: 70%;
+    height: 300px;
+}
+
+.btn-login{
+    position: absolute;
+    right: 0;
+    width: 100px;
+}
