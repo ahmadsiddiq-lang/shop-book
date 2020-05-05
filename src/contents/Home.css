@@ -32,6 +32,7 @@
     top: 0;
 }
 .cartHeader{
+    /* border: 2px solid; */
     position: absolute;
     width: 25%;
     height: 80px;
@@ -40,10 +41,22 @@
     border-left: 1px solid rgba(212, 212, 212, 0.25);
 }
 
-.elipse{
+.cartIcon{
+    display: none;
+}
+
+.box-title-cart{
     position: relative;
-    bottom: 48%;
-    left: 60%;
+    /* border: 2px solid; */
+    width: 120px;
+    margin: auto;
+}
+
+.elipse{
+    position: absolute;
+    bottom: 7px;
+    right: 0;
+    /* left: 60%; */
     line-height: 25px;
     width: 25px;
     height: 25px;
@@ -66,7 +79,7 @@
 
 .cartBar{
     position: fixed;
-    width: 25%;
+    width: 340px;
     height: 100px;
     right: 0;
     bottom: 0;
@@ -208,9 +221,9 @@
 .sidebarBox{
     position: fixed;
     height: 100%;
-    width: 15%;
+    width: 250px;
     top: 0;
-    left: -40%;
+    left: -255px;
     background: #FFFFFF;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
     z-index: 999;
@@ -673,13 +686,26 @@
     margin-top: 20%;
 }
 
+.box-day-income{
+    /* border: 2px solid; */
+    width: 94%;
+    margin: auto;
+}
+
+.boxIncome{
+    width: 30%;
+    max-width: 30%;
+    min-width: 250px;
+    height: 135px;
+    float: left;
+    margin-top: 20px;
+    margin-left: 20px;
+}
 
 .box-day{
     /* Rectangle 9 */
 
-position: absolute;
-width: 272px;
-height: 135px;
+/* position: absolute; */
 left: 110px;
 top: 100px;
 
@@ -692,10 +718,8 @@ border-radius: 10px;
 .box-mon{
     /* Rectangle 9 */
 
-position: absolute;
-width: 272px;
-height: 135px;
-left: 415px;
+/* position: absolute; */
+left: 39%;
 top: 100px;
 
 background: linear-gradient(285.38deg, #29DFFF 30.05%, rgba(41, 223, 255, 0) 133.19%);
@@ -707,10 +731,8 @@ border-radius: 10px;
 .box-year{
     /* Rectangle 9 */
 
-position: absolute;
-width: 272px;
-height: 135px;
-left: 720px;
+/* position: absolute; */
+right: 5%;
 top: 100px;
 
 background: linear-gradient(285.38deg, #AB84C8 30.05%, rgba(241, 201, 236, 0) 133.19%);
@@ -732,11 +754,13 @@ border-radius: 10px;
 .chart{
     /* Rectangle 10 */
 
-position: absolute;
-width: 64.5%;
+/* position: absolute; */
+margin: auto;
+margin-top: 40px;
+width: 90%;
 height: 322px;
-left: 110px;
-top: 252px;
+/* left: 110px; */
+/* top: 252px; */
 
 background: #FFFFFF;
 box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.25);
@@ -815,4 +839,59 @@ border-radius: 10px;
  */
 .cf {
     *zoom: 1;
+}
+
+
+/* Responsif screen */
+
+@media screen and (max-width: 1090px) {
+
+    .cartBar{
+        right: -360px;
+        transition: .5s;
+    }
+
+    .content{
+        /* border: 2px solid; */
+        width: 92%;
+        max-width: 100%;
+        margin-top: 80px;
+        margin-left: 80px;
+        background-color: rgb(235, 235, 235);
+        padding-bottom: 10px;
+    }
+
+    .title{
+        display: none;
+    }
+    .cartIcon{
+        display: inline-block;
+        margin-top: 15px;
+        cursor: pointer;
+    }
+    .elipse{
+        top: 8px;
+        right: 25px;
+    }
+
+    .cart-active{
+        right: 0;
+    }
+
+    .box-day-income{
+        /* border: 2px solid; */
+        width: 99%;
+    }
+
+    .chart{
+        width: 81.5%;
+    }
+
+    .boxIncome{
+        width: 30%;
+        max-width: 30%;
+        height: 135px;
+        float: left;
+        margin-left: 20px;
+    }
 }
