@@ -19,6 +19,7 @@ const Home = () => {
     const [verifyLogin, setVerifyLogin] = useState(false)
     const [transInput, setTrans] = useState(false)
     const [sidBarBox, setBar] = useState(false)
+    const [cartBar, setCartBar] = useState(false)
     const [modal, setModals] = useState(true)
     const [modalCheckout, setModalsCheckout] = useState(false)
     const [qty, setQty] = useState({});
@@ -294,7 +295,6 @@ const Home = () => {
 
     const checkout =()=>{
         if(verifyLogin === true){
-            setModalsCheckout(modalCheckout ? false : true)
             dataCart.forEach(data=>{
                 const input = {
                     id_product: data.id_product,
@@ -308,14 +308,19 @@ const Home = () => {
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
-                        title: 'Update Success !',
+                        title: 'Checkout Success !',
                         showConfirmButton: false,
                         timer: 1500
                     })
                     handleCloseCheckout()
+                    setTimeout(()=>{
+                        setModalsCheckout(modalCheckout ? false : true)
+                    }, 1600)
                 }).catch(err=>console.log(err))
             })
-            const dataPriceTotal = {total_price:totalPrice}
+            let date_ob = new Date();
+            let date_day = date_ob.getFullYear() + "-" + ("0" + (date_ob.getMonth() + 1)).slice(-2) + "-" + ("0" + date_ob.getDate()).slice(-2)
+            const dataPriceTotal = {total_price:totalPrice, date_added:date_day}
             Axios.post(BASE_URL+'/order',dataPriceTotal,{
                 withCredentials: true,
               })
@@ -596,12 +601,10 @@ const Home = () => {
         Axios.get('http://54.204.68.167:4000/verify',{
           withCredentials: true,
         }).then(res=>{
-            if(res.data.messege === "token infalid"){
-                console.log('logout')
-                // history.push('/')
-            }else{
+            if(res.data.messege !== "token infalid"){
                 setVerifyLogin(true)
-          }
+                // console.log('logout')
+            }
         }).catch(err=>{console.log(err)})
     },[history])
     
@@ -654,8 +657,11 @@ const Home = () => {
                 <input onKeyDown={handleSearch} onChange={(e)=>setDataSearch(e.target.value)} type="text" placeholder="search" className={transInput ? 'inputSearch active' : 'inputSearch'} />
                 <img className="imgSearch" onClick={()=> setTrans(transInput ? false : true)} src={require('../asset/img/search.png')} alt=""/>
                 <div className="cartHeader">
-                    <h1 className="title">Cart</h1>
-                    <div className="elipse">{dataCart ? dataCart.length : 0}</div>
+                    <div className="box-title-cart">
+                        <h1 className="title">Cart</h1>
+                        <img onClick={()=> setCartBar(cartBar ? false : true)} className="cartIcon" src={require('../asset/img/cart.png')} alt=""/>
+                        <div className="elipse">{dataCart ? dataCart.length : 0}</div>
+                    </div>
                 </div>
             </div>
             <div className="sideBar" style={{height: height}}>
@@ -692,7 +698,7 @@ const Home = () => {
             </div>
             {
                 dataCart.length > 0 ?  
-                <div className="cartBar" style={{height: height}}>
+                <div className={cartBar ? "cartBar cart-active" : "cartBar"} style={{height: height}}>
                     <div className="ContentCart">
                         {
                              dataCart.length > 0 ? (dataCart.map(post=>{
@@ -727,7 +733,7 @@ const Home = () => {
                         <button onClick={()=> handleCancel()}  type="button" className="btn btn-secondary btn-lg btn-block">Cencel</button>
                     </div>
                 </div> :
-                <div className="cartBar" style={{height: height}}>
+                <div className={cartBar ? "cartBar cart-active" : "cartBar"} style={{height: height}}>
                     <img className="iconEmpty" src={require('../asset/img/food-and-restaurant.png')} alt=""/>
                     <h3>Your cart is empty</h3>
                     <p className="textCart">Please add some items from the menu</p>
@@ -760,32 +766,34 @@ const Home = () => {
                         </div> )
                 ):(
                     <>
-                        <div className="box-day">
-                            <div className="content-card">
-                                <p>Today’s Income</p>
-                                <h4>Rp. {dataIncomeDay ? dataIncomeDay : 0}</h4>
-                                {
-                                    dataAwal < dataAkhir ? <p>+{dataPersenDay}% Yesterday</p> : dataAwal > dataAkhir ? <p>-{dataPersenDay}% Yesterday</p> : <p>0% Yesterday</p>
-                                }
-                                
+                        <div className="box-day-income cf">
+                            <div className="box-day boxIncome">
+                                <div className="content-card">
+                                    <p>Today’s Income</p>
+                                    <h4>Rp. {dataIncomeDay ? dataIncomeDay : 0}</h4>
+                                    {
+                                        dataAwal < dataAkhir ? <p>+{dataPersenDay}% Yesterday</p> : dataAwal > dataAkhir ? <p>-{dataPersenDay}% Yesterday</p> : <p>0% Yesterday</p>
+                                    }
+                                    
+                                </div>
                             </div>
-                        </div>
-                        <div className="box-mon">
-                            <div className="content-card">
-                                <p>Orders</p>
-                                <h4>{dataOrderTotal ? dataOrderTotal : 0}</h4>
-                                {
-                                    dataOrderAwal < dataOrderAkhir ? <p>+{dataPersenLstWeek}% Last Week</p> : dataOrderAwal > dataOrderAkhir ? <p>-{dataPersenLstWeek}% Last Week</p> : <p>0% Last Week</p>
-                                }
+                            <div className="box-mon boxIncome">
+                                <div className="content-card">
+                                    <p>Orders</p>
+                                    <h4>{dataOrderTotal ? dataOrderTotal : 0}</h4>
+                                    {
+                                        dataOrderAwal < dataOrderAkhir ? <p>+{dataPersenLstWeek}% Last Week</p> : dataOrderAwal > dataOrderAkhir ? <p>-{dataPersenLstWeek}% Last Week</p> : <p>0% Last Week</p>
+                                    }
+                                </div>
                             </div>
-                        </div>
-                        <div className="box-year">
-                            <div className="content-card">
-                                <p>This Year’s Income</p>
-                                <h4>Rp. {dataIncomeYear ? dataIncomeYear : 0}</h4>
-                                {
-                                    dataYearAwal < dataYearAkhir ? <p>+{dataPersenYear}% Last Year</p> : dataYearAwal > dataYearAkhir ? <p>-{dataPersenYear}% Last Year</p> : <p>0% Last Year</p>
-                                }
+                            <div className="box-year boxIncome">
+                                <div className="content-card">
+                                    <p>This Year’s Income</p>
+                                    <h4>Rp. {dataIncomeYear ? dataIncomeYear : 0}</h4>
+                                    {
+                                        dataYearAwal < dataYearAkhir ? <p>+{dataPersenYear}% Last Year</p> : dataYearAwal > dataYearAkhir ? <p>-{dataPersenYear}% Last Year</p> : <p>0% Last Year</p>
+                                    }
+                                </div>
                             </div>
                         </div>
                         <div className="chart">
