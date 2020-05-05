@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.46303154.chunk.css",
+    "main.js": "/static/js/main.ef0d7385.chunk.js",
+    "main.js.map": "/static/js/main.ef0d7385.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.6ed6f1db.js",
+    "runtime-main.js.map": "/static/js/runtime-main.6ed6f1db.js.map",
+    "static/js/2.5e87c092.chunk.js": "/static/js/2.5e87c092.chunk.js",
+    "static/js/2.5e87c092.chunk.js.map": "/static/js/2.5e87c092.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.2e532663f15333047dd679a22cb5cc72.js": "/precache-manifest.2e532663f15333047dd679a22cb5cc72.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.46303154.chunk.css.map": "/static/css/main.46303154.chunk.css.map",
+    "static/js/2.5e87c092.chunk.js.LICENSE.txt": "/static/js/2.5e87c092.chunk.js.LICENSE.txt",
+    "static/media/Home.css": "/static/media/AirbnbCerealMedium.d9fb3054.ttf",
+    "static/media/search.png": "/static/media/search.02c27509.png",
+    "static/media/spoon.png": "/static/media/spoon.f88436c9.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6ed6f1db.js",
+    "static/js/2.5e87c092.chunk.js",
+    "static/css/main.46303154.chunk.css",
+    "static/js/main.ef0d7385.chunk.js"
+  ]
+}
