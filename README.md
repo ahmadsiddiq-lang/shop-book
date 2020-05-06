@@ -40,7 +40,7 @@ Cashier app is an application that manages a sales system that displays informat
  <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/income_edit.jpg" width="700" />
 </p>
 
-### Income
+### Add product
 
 <p align="center">
  <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/add-item_edit.jpg" width="700" />
