@@ -7,43 +7,43 @@ Cashier app is an application that manages a sales system that displays informat
 
 ## How To Run
 
-Open your terminal or command prompt.
-Type $ git clone https://github.com/ahmadsiddiq-lang/shop-book.git.
-Open the folder and type $ npm install for install dependencies.
-Create .env file on your favorite code editor, and copy paste this code below :
-REACT_APP_URL_STRING = http://localhost:4000/
-type $ npm start for run dependencies.
+1. Open your terminal or command prompt.
+2. Type $ git clone https://github.com/ahmadsiddiq-lang/shop-book.git.
+3. Open the folder and type $ npm install for install dependencies.
+4. Create .env file on your favorite code editor, and copy paste this code below :
+5. REACT_APP_URL_STRING = http://localhost:4000/
+6. type $ npm start for run dependencies.
 
 ## Screenshoot
 
 ### Login
 
 <p align="center">
- <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/login_edit.jpg" width="280" />
+ <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/login_edit.jpg" width="400" />
 </p>
 
 ### Dashboard
 
 <p align="center">
- <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/Dashboard_edit.jpg" width="280" />
+ <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/Dashboard_edit.jpg" width="400" />
 </p>
 
 ### Checkout
 
 <p align="center">
- <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/Checkout_edit.jpg" width="280" />
+ <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/Checkout_edit.jpg" width="400" />
 </p>
 
 ### Income
 
 <p align="center">
- <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/income_edit.jpg" width="280" />
+ <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/income_edit.jpg" width="400" />
 </p>
 
 ### Income
 
 <p align="center">
- <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/add-item_edit.jpg" width="280" />
+ <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/add-item_edit.jpg" width="400" />
 </p>
 
 
