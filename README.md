@@ -19,31 +19,31 @@ Cashier app is an application that manages a sales system that displays informat
 ### Login
 
 <p align="center">
- <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/login_edit.jpg" width="400" />
+ <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/login_edit.jpg" width="700" />
 </p>
 
 ### Dashboard
 
 <p align="center">
- <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/Dashboard_edit.jpg" width="400" />
+ <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/Dashboard_edit.jpg" width="700" />
 </p>
 
 ### Checkout
 
 <p align="center">
- <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/Checkout_edit.jpg" width="400" />
+ <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/Checkout_edit.jpg" width="700" />
 </p>
 
 ### Income
 
 <p align="center">
- <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/income_edit.jpg" width="400" />
+ <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/income_edit.jpg" width="700" />
 </p>
 
 ### Income
 
 <p align="center">
- <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/add-item_edit.jpg" width="400" />
+ <img src="https://github.com/ahmadsiddiq-lang/shop-book/blob/master/src/screenshot/add-item_edit.jpg" width="700" />
 </p>
 
 
