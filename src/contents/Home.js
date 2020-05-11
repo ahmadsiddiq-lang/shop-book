@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 require('dotenv').config()
 
 const Home = () => {
-    const BASE_URL = 'http://54.204.68.167:4000';
+    const BASE_URL = 'http://54.164.243.82:4000';
     const [height, setHeight] = useState(window.innerHeight - 80)
     const [showContent, setShowContent] = useState(true)
     const [verifyLogin, setVerifyLogin] = useState(false)
@@ -598,7 +598,7 @@ const Home = () => {
     }, [])
 
     useEffect(()=>{
-        Axios.get('http://54.204.68.167:4000/verify',{
+        Axios.get('http://54.164.243.82:4000/verify',{
           withCredentials: true,
         }).then(res=>{
             if(res.data.messege !== "token infalid"){
