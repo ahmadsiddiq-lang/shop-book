@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import Swal from 'sweetalert2';
-const BASE_URL = 'http://54.204.68.167:4000';
+const BASE_URL = 'http://54.164.243.82:4000';
 
 export const getProduct = ()=>{
     return{
