@@ -48,8 +48,8 @@ Cashier app is an application that manages a sales system that displays informat
 
 
 ## Demo 
-<a href="https://go.aws/2YzgCod">
-  <p>https://go.aws/2YzgCod</p>
+<a href="https://go.aws/2WlJAqg">
+  <p>https://go.aws/2WlJAqg</p>
 </a>
 
 ## Related Project 
